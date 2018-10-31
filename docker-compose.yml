@@ -15,19 +15,21 @@ services:
 
   traefik:
     image: traefik # The official Traefik docker image
-    command: --api --docker.exposedbydefault=false # Enables the web UI and tells Træfik to listen to docker, without exposing by default
+    container_name: traefik
+    command: --api  --defaultentrypoints=front_end --entryPoints='Name:front_end Address::80 Compress:true' --docker.exposedbydefault=false # Enables the web UI and tells Træfik to listen to docker, without exposing by default
+    networks:
+    - internal
     ports:
       - "80:80"     # The HTTP port
       - "8080:8080" # The Web UI (enabled by --api)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
-    depends_on:
-    - pet-gateway
-    - pet-porta
       
   pet-gateway:
     build: "./pet_gateway/"
     container_name: pet_gateway
+    expose:
+      - 3000
     networks:
     - internal
     - pet_host
@@ -38,10 +40,14 @@ services:
     labels:
     - "traefik.enable=true"
     - "traefik.frontend.rule=Host:${APP_HOST}"
+    depends_on:
+    - traefik
 
   pet-porta:
     build: "./pet_porta/"
     container_name: pet_porta
+    expose:
+      - 80
     depends_on:
     - pet-gateway
     labels:
@@ -52,6 +58,8 @@ services:
     - pet_host
     entrypoint:
     - /usr/local/bin/docker-entrypoint.sh
+    depends_on:
+    - traefik
 
 networks:
   pet_host:
