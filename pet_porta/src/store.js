@@ -33,12 +33,9 @@ export default new Vuex.Store({
   actions: {
     // request to open the door
     abrir ({ commit }) {
-      return new Promise((resolve, reject) => {
+      return new Promise(() => {
         commit('porta_aberta')
         axios({ url: 'http://localhost:3000/abrir', method: 'POST' }) // this Post ask to open the door
-        .then(resp => {
-          resolve(resp)
-        })
       })
     },
     // request for login

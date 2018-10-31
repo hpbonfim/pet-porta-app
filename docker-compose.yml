@@ -29,6 +29,21 @@ services:
     - /root/traefik.toml:/traefik.toml
     - /root/acme.json:/acme.json
 
+  mysql:
+    image: mysql:latest
+    container_name: db
+    volumes:
+    - ./db:/usr/src/pet_gateway
+    labels:
+    - "traefik.enable=true"
+    - "traefik.docker.network=pet_host"
+    environment:
+    - MYSQL_DATABASE_PORT
+    - MYSQL_ROOT_PASSWORD=1234567890
+    - MYSQL_DATABASE=database
+    networks:
+    - internal
+
   socat:
     image: alpine/socat
     container_name: socat
@@ -41,7 +56,7 @@ services:
   pet_gateway:
     build: "./pet_gateway/"
     container_name: pet_gateway
-    #command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
+    command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
     expose:
       - ${APP_SERVER_PORT}
     environment:

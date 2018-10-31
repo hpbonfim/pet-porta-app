@@ -32,8 +32,7 @@ app.use(allowCrossDomain)
 
 //----------------------------------------------------
 board.on("ready", function() {
-  const relay = new five.Relay({type: "NC",
-  pin: 5});
+  const relay = new five.Led(5);
     global = relay
   this.repl.inject({
     relay: relay
@@ -41,8 +40,9 @@ board.on("ready", function() {
 })
 //opening the door
 router.post('/abrir', function(){
-    setTimeout(function(){
-        global.toggle()
+  global.off()  
+  setTimeout(function(){
+        global.on()
       }, 1000)
 })
 //----------------------------------------------------
