@@ -21,66 +21,40 @@ services:
       - "8080:8080" # The Web UI (enabled by --api)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
-      
-  db:
-    image: mysql:5
-    volumes:
-    - ./db:/var/lib/db
-    labels:
-    - "traefik.enable=false"
-    networks:
-    - internal
-    environment:
-    - MYSQL_ROOT_PASSWORD
-    - MYSQL_DATABASE
-
-  redis:
-    image: redis:alpine
-    networks:
-    - internal
     depends_on:
-    - traefik
-
+    - pet-gateway
+    - pet-porta
+      
   pet-gateway:
-    build: "./pet-gateway/"
-    container_name: pet-gateway
+    build: "./pet_gateway/"
+    container_name: pet_gateway
     networks:
     - internal
-    - traefiknet
+    - pet_host
+    volumes:
+    - db:/usr/src/gateway
+    entrypoint:
+    - /usr/local/bin/docker-entrypoint.sh
     labels:
     - "traefik.enable=true"
     - "traefik.frontend.rule=Host:${APP_HOST}"
-    environment:
-      - DB_HOST=db
-      - DB_NAME=${MYSQL_DATABASE}
-      - DB_USER=root
-      - DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - REDIS_HOST=redis
-    depends_on:
-    - db
-    - traefik
-    - redis
 
   pet-porta:
-    build: "./pet-porta/"
-    container_name: pet-porta
+    build: "./pet_porta/"
+    container_name: pet_porta
     depends_on:
-    - mysql
-    - traefik 
     - pet-gateway
     labels:
     - "traefik.enabled=true"
     - "traefik.frontend.rule=Host:${APP_HOST}" 
     networks:
     - internal
-    - traefiknet
-    depends_on:
-    - db
-    - traefik
-    - redis
+    - pet_host
+    entrypoint:
+    - /usr/local/bin/docker-entrypoint.sh
 
 networks:
-  traefiknet:
+  pet_host:
     external: true
   internal:
     external: false
