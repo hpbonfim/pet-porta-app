@@ -1,19 +1,33 @@
+logLevel = "DEBUG"
 defaultEntryPoints = ["http", "https"]
 
 [web]
-    address = ":8080"
+address = ":8080"
+
+[docker]
+domain = "localhost.local"
+watch = true
 
 [entryPoints]
-    [entryPoints.http]
-        address = ":80"
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
 
-    [entryPoints.https]
-        address = ":443"
-        [entryPoints.https.tls]
+[file]
+filename = "./rules.toml"
+watch = true
 
 [acme]
     email = "hp_bonfim@hotmail.com"
     storageFile = "acme.json"
     entryPoint = "https"
-    onDemand = true
+    acmeLogging = true
+    onDemand = false
     onHostRule = true
+
+[acme.httpChallenge]
+  entryPoint = "http"

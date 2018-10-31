@@ -4,15 +4,16 @@ const config = require('./config')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
+const app = express()
+const router = express.Router()
 //board arduino const
+var EtherPort = require("etherport");
 const five = require("johnny-five")
-const board = new five.Board()
+const board = new five.Board({port: new EtherPort(3030)})
 var global
 //sqlite db const
 const DB = require('./db')
 const db = new DB('sqlitedb')
-const app = express()
-const router = express.Router()
 //jwt bodyparser
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
@@ -31,18 +32,19 @@ app.use(allowCrossDomain)
 
 //----------------------------------------------------
 board.on("ready", function() {
-  var fechadura = new five.Led(7);
-  fechadura.on()
-  global = fechadura
-});
+  const relay = new five.Relay({type: "NC",
+  pin: 5});
+    global = relay
+  this.repl.inject({
+    relay: relay
+  })
+})
 //opening the door
-router.post('/abrir', function(req, res){
-  global.off()
+router.post('/abrir', function(){
     setTimeout(function(){
-        global.on()
+        global.toggle()
       }, 1000)
-      res.send('porta aberta!')
-});
+})
 //----------------------------------------------------
 // registering a new user
 router.post('/register', function (req, res) {
@@ -98,4 +100,4 @@ router.post('/login', (req, res) => {
 app.use(router)
 const port = 3000 //process.env.PORT 
 app.listen(port)
-console.log('App running on port', port)
+console.log('Gateway:', port)

@@ -16,7 +16,7 @@ services:
   traefik:
     image: traefik:latest # The official Traefik docker image
     container_name: traefik
-    command: --docker --docker.watch --docker.domain=docker.localhost --logLevel=DEBUG --entryPoints="Name:http Address::80" --api --docker.endpoint=tcp://socat:2375 --docker.exposedbydefault=false # Enables the web UI and tells Træfik to listen to docker, without exposing by default
+    command: --docker --api --docker.watch --docker.domain=docker.localhost --logLevel=DEBUG  --docker.endpoint=tcp://socat:2375 --docker.exposedbydefault=false # Enables the web UI and tells Træfik to listen to docker, without exposing by default
     networks:
     - internal
     - pet_host
@@ -26,8 +26,8 @@ services:
     - "443:443"
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
-    - /etc/traefik/traefik.toml:/etc/traefik/traefik.toml
-    - /etc/traefik/acme.json:/etc/traefik/acme.json
+    - /root/traefik.toml:/traefik.toml
+    - /root/acme.json:/acme.json
 
   socat:
     image: alpine/socat
@@ -58,9 +58,8 @@ services:
     - /usr/local/bin/docker-entrypoint.sh
     labels:
     - "traefik.enable=true"
+    - "traefik.frontend.rule=Host:pet_gateway.localhost"
     - "traefik.docker.network=pet_host"
-    - "traefik.backend=pet_gateway"
-    - "traefik.port:${APP_SERVER_PORT}"
     depends_on:
     - traefik
 
@@ -79,10 +78,8 @@ services:
       - ${PET_APP_PORT}:${PET_APP_PORT}
     labels:
     - "traefik.enabled=true"
-    - "traefik.frontend.entryPoints=http"
-    - "traefik.frontend.rule=Host:${APP_HOST}" 
+    - "traefik.frontend.rule=Host:pet_porta.localhost" 
     - "traefik.docker.network=pet_host"
-    - "traefik.port:${PET_APP_PORT}"
     networks:
     - pet_host
     entrypoint:

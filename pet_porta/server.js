@@ -6,7 +6,7 @@ app.use('/', express.static(`${__dirname}/dist`)) // set the static files locati
 app.use('/', router)
 //app.listen(port)
 //console.log('App running on port', port)
-const PORT = 8008;
+const PORT = 8000;
 //const HOST = '0.0.0.0';
 app.set('port', PORT);
 const server = http.createServer(app);
