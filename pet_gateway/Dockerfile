@@ -4,14 +4,14 @@ ENV NODE_ENV=production
 # copy package.json to a temporary folder
 ADD package.json /tmp/package.json
 # installing the node_modules 
-RUN cd /tmp && npm install --prod && \
+RUN cd /tmp && npm install --only=production && \
     npm cache clean --force
 # created a directory and copy all nedded files
-RUN mkdir -p /usr/src/gateway && cp -a /tmp/node_modules /usr/src/gateway
+RUN mkdir -p /usr/src/pet_gateway && cp -a /tmp/node_modules /usr/src/pet_gateway
 # "layer" thats been cached will be used if possible
-WORKDIR /usr/src/gateway
+WORKDIR /usr/src/pet_gateway
 # create a worker folder and add all files to mainwork
-ADD . /usr/src/gateway
+ADD . /usr/src/pet_gateway
 # Entrypoint script
 RUN cp docker-entrypoint.sh /usr/local/bin/ && \
     chmod +x /usr/local/bin/docker-entrypoint.sh

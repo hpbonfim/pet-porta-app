@@ -19,5 +19,6 @@
     "nodemon": "^1.18.4",
     "redis": "^2.8.0",
     "sqlite3": "^4.0.3"
-  }
+  },
+  "proxy": "http://localhost:3000"
 }

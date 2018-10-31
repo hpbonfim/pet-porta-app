@@ -1,7 +1,8 @@
 <template>
   <v-container fluid>
         <v-layout column align-center>
-            <div class="button"><img height="100" src="../assets/ClickHereHand.gif">
+          <v-btn @click="logout()">Sair</v-btn>
+            <div class="button" @click="abrir()"><img height="100" src="../assets/ClickHereHand.gif">
               <div class="outer">
                 <div class="height">
                   <div class="inner">
@@ -17,6 +18,9 @@
 <script>
 export default {
   methods: {
+    abrir: function (){
+      this.$store.dispatch('abrir')
+    },
     logout: function () {
       this.$store.dispatch('logout')
         .then(() => {

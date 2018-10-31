@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.7'
 services:
   portainer:
     image: portainer/portainer:latest
@@ -6,7 +6,7 @@ services:
     ports:
     - '9000:9000'
     networks:
-    - internal
+    - pet_host
     labels:
     - "traefik.enable=false"
     volumes:
@@ -14,47 +14,76 @@ services:
     - portainerdata:/data
 
   traefik:
-    image: traefik # The official Traefik docker image
+    image: traefik:latest # The official Traefik docker image
     container_name: traefik
-    command: --api  --defaultentrypoints=front_end --entryPoints='Name:front_end Address::80 Compress:true' --docker.exposedbydefault=false # Enables the web UI and tells Træfik to listen to docker, without exposing by default
-    networks:
-    - internal
-    ports:
-      - "80:80"     # The HTTP port
-      - "8080:8080" # The Web UI (enabled by --api)
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
-      
-  pet-gateway:
-    build: "./pet_gateway/"
-    container_name: pet_gateway
-    expose:
-      - 3000
+    command: --docker --docker.watch --docker.domain=docker.localhost --logLevel=DEBUG --entryPoints="Name:http Address::80" --api --docker.endpoint=tcp://socat:2375 --docker.exposedbydefault=false # Enables the web UI and tells Træfik to listen to docker, without exposing by default
     networks:
     - internal
     - pet_host
+    ports:
+    - "80:80"     # The HTTP port
+    - "8080:8080" # The Web UI (enabled by --api)
+    - "443:443"
     volumes:
-    - db:/usr/src/gateway
+    - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+    - /etc/traefik/traefik.toml:/etc/traefik/traefik.toml
+    - /etc/traefik/acme.json:/etc/traefik/acme.json
+
+  socat:
+    image: alpine/socat
+    container_name: socat
+    command: tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+    - internal
+
+  pet_gateway:
+    build: "./pet_gateway/"
+    container_name: pet_gateway
+    #command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
+    expose:
+      - ${APP_SERVER_PORT}
+    environment:
+      API_HOST: ${API_HOST}
+      APP_SERVER_PORT: ${APP_SERVER_PORT}
+    ports:
+      - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+    networks:
+    - pet_host
+    volumes:
+    - ./server/src:/usr/src/pet_gateway/src
+    - db:/usr/src/pet_gateway
     entrypoint:
     - /usr/local/bin/docker-entrypoint.sh
     labels:
     - "traefik.enable=true"
-    - "traefik.frontend.rule=Host:${APP_HOST}"
+    - "traefik.docker.network=pet_host"
+    - "traefik.backend=pet_gateway"
+    - "traefik.port:${APP_SERVER_PORT}"
     depends_on:
     - traefik
 
-  pet-porta:
+  pet_porta:
     build: "./pet_porta/"
     container_name: pet_porta
-    expose:
-      - 80
     depends_on:
-    - pet-gateway
+    - pet_gateway
+    volumes:
+    - ./pet_porta/src:/usr/src/pet_porta/src
+    expose:
+      - ${PET_APP_PORT}
+    environment:
+      PET_APP_PORT: ${PET_APP_PORT}
+    ports:
+      - ${PET_APP_PORT}:${PET_APP_PORT}
     labels:
     - "traefik.enabled=true"
+    - "traefik.frontend.entryPoints=http"
     - "traefik.frontend.rule=Host:${APP_HOST}" 
+    - "traefik.docker.network=pet_host"
+    - "traefik.port:${PET_APP_PORT}"
     networks:
-    - internal
     - pet_host
     entrypoint:
     - /usr/local/bin/docker-entrypoint.sh
@@ -65,7 +94,7 @@ networks:
   pet_host:
     external: true
   internal:
-    external: false
+    external: true
 volumes:
   portainerdata:
   db:

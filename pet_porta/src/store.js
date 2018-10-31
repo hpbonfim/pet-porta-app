@@ -11,6 +11,9 @@ export default new Vuex.Store({
     user: {}
   },
   mutations: {
+    porta_aberta (state){
+      state.status = 'Porta Aberta'
+    },
     auth_request (state) { // see if all request on the client size it's be suppress
       state.status = 'loading'
     },
@@ -28,6 +31,16 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    // request to open the door
+    abrir ({ commit }) {
+      return new Promise((resolve, reject) => {
+        commit('porta_aberta')
+        axios({ url: 'http://localhost:3000/abrir', method: 'POST' }) // this Post ask to open the door
+        .then(resp => {
+          resolve(resp)
+        })
+      })
+    },
     // request for login
     login ({ commit }, user) {
       return new Promise((resolve, reject) => {

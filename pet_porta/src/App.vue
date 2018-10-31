@@ -2,9 +2,8 @@
   <v-app>
     <div id="app">
       <div id="nav">
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link v-if="this.$store.getters.isLoggedIn" @click="this.$store.dispach('logout')">Logout</router-link>
+      <router-link to="/login">Login</router-link> |    
+      <router-link to="/about">About</router-link> 
       </div>
     <router-view/>
      <v-footer dark height="auto" absolute>

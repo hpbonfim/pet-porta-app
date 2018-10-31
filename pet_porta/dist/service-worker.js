@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.05516e6749c1ee47f6f1b41fd0385c1d.js"
+  "/precache-manifest.2a0f4c5637607a20209725b63664bf2c.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "porta"});

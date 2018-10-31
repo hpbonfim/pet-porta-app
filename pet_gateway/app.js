@@ -30,20 +30,18 @@ app.use(allowCrossDomain)
 //----------------------------------------------------
 
 //----------------------------------------------------
-//opening the door
-router.post('/abrir', function(req, res){
-  global.off();
-    setTimeout(function(){
-        global.on();
-      }, 1000);
-      res.send('ok');
-});
-
 board.on("ready", function() {
   var fechadura = new five.Led(7);
-  fechadura.on();
-  DelayNode(10);
-  fechadura.off();
+  fechadura.on()
+  global = fechadura
+});
+//opening the door
+router.post('/abrir', function(req, res){
+  global.off()
+    setTimeout(function(){
+        global.on()
+      }, 1000)
+      res.send('porta aberta!')
 });
 //----------------------------------------------------
 // registering a new user
