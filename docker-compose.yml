@@ -1,11 +1,25 @@
 version: '3.7'
 services:
+  traefik:
+    image: traefik:latest # The official Traefik docker image
+    container_name: traefik
+    command: --docker --api --docker.watch --docker.domain=docker.localhost --logLevel=DEBUG  --docker.endpoint=tcp://socat:2375 --docker.exposedbydefault=false # Enables the web UI and tells Træfik to listen to docker, without exposing by default
+    networks:
+    - pet_host
+    ports:
+    - "80:80"     # The HTTP port
+    - "8080:8080" # The Web UI (enabled by --api)
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+    - /root/traefik.toml:/traefik.toml
+    - /root/acme.json:/acme.json
+
   portainer:
     image: portainer/portainer:latest
     container_name: portainer
     ports:
     - '9000:9000'
-    networks:
+    networks: 
     - pet_host
     labels:
     - "traefik.enable=false"
@@ -13,36 +27,33 @@ services:
     - /var/run/docker.sock:/var/run/docker.sock
     - portainerdata:/data
 
-  traefik:
-    image: traefik:latest # The official Traefik docker image
-    container_name: traefik
-    command: --docker --api --docker.watch --docker.domain=docker.localhost --logLevel=DEBUG  --docker.endpoint=tcp://socat:2375 --docker.exposedbydefault=false # Enables the web UI and tells Træfik to listen to docker, without exposing by default
-    networks:
-    - internal
-    - pet_host
-    ports:
-    - "80:80"     # The HTTP port
-    - "8080:8080" # The Web UI (enabled by --api)
-    - "443:443"
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
-    - /root/traefik.toml:/traefik.toml
-    - /root/acme.json:/acme.json
 
   mysql:
-    image: mysql:latest
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
     container_name: db
     volumes:
-    - ./db:/usr/src/pet_gateway
+    - .pet_database:/usr/src/pet_database
     labels:
     - "traefik.enable=true"
     - "traefik.docker.network=pet_host"
     environment:
-    - MYSQL_DATABASE_PORT
-    - MYSQL_ROOT_PASSWORD=1234567890
-    - MYSQL_DATABASE=database
+      MYSQL_DATABASE: pet_db
     networks:
-    - internal
+    - pet_host
+    ports:
+    - 3005:3005
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8081:80
+    depends_on:
+    - mysql
+    networks:
+    - pet_host
 
   socat:
     image: alpine/socat
@@ -51,19 +62,35 @@ services:
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     networks:
-    - internal
+    - pet_host
+    depends_on:
+    - traefik
+
+  pet_database:
+    build: "./pet_database/"
+    container_name: pet_database
+    volumes:
+    - .pet_database:/usr/src/pet_database
+    environment:
+    - DB_HOST=db
+    - DB_USER=root
+    - DB_NAME=${MYSQL_DATABASE}
+    - DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    labels:
+    - traefik.enable=true"
+    - "traefik.docker.network=pet_host.localhost"
+    networks:
+    - pet_host
 
   pet_gateway:
     build: "./pet_gateway/"
     container_name: pet_gateway
     command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
-    expose:
-      - ${APP_SERVER_PORT}
     environment:
-      API_HOST: ${API_HOST}
-      APP_SERVER_PORT: ${APP_SERVER_PORT}
+    - API_HOST=${API_HOST}
+    - API_SERVER_PORT=${API_SERVER_PORT}
     ports:
-      - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+    - "3000:3000"
     networks:
     - pet_host
     volumes:
@@ -76,6 +103,7 @@ services:
     - "traefik.frontend.rule=Host:pet_gateway.localhost"
     - "traefik.docker.network=pet_host"
     depends_on:
+    - mysql
     - traefik
 
   pet_porta:
@@ -85,12 +113,8 @@ services:
     - pet_gateway
     volumes:
     - ./pet_porta/src:/usr/src/pet_porta/src
-    expose:
-      - ${PET_APP_PORT}
-    environment:
-      PET_APP_PORT: ${PET_APP_PORT}
     ports:
-      - ${PET_APP_PORT}:${PET_APP_PORT}
+    - "8000:8000"
     labels:
     - "traefik.enabled=true"
     - "traefik.frontend.rule=Host:pet_porta.localhost" 
@@ -100,12 +124,11 @@ services:
     entrypoint:
     - /usr/local/bin/docker-entrypoint.sh
     depends_on:
+    - pet_gateway
     - traefik
 
 networks:
   pet_host:
-    external: true
-  internal:
     external: true
 volumes:
   portainerdata:

@@ -11,7 +11,7 @@ export default new Vuex.Store({
     user: {}
   },
   mutations: {
-    porta_aberta (state){
+    porta_aberta (state) {
       state.status = 'Porta Aberta'
     },
     auth_request (state) { // see if all request on the client size it's be suppress

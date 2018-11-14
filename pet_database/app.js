@@ -31,13 +31,13 @@ app.use(allowCrossDomain)
 //----------------------------------------------------
 // Init MySQL Connection
 var mysql = require('mysql');
-var connection = mysql.createConnection({
+var pet_database = mysql.createConnection({
   host: rules.get('db.host'),
   user: rules.get('db.user'),
   password: rules.get('db.password'),
   database: rules.get('db.name')
 });
-connection.connect((err) => {
+pet_database.connect((err) => {
   if (!err)
       console.log('DB connection succeded.');
   else
@@ -61,6 +61,27 @@ router.post('/abrir', function(){
       }, 1000)
 })
 //----------------------------------------------------
+//3/11/2018
+router.post('/register', (req, res) => {
+  let user = req.body;
+  var sql = "SET @UserID = ?;SET @name = ?;SET @email = ?;SET @password = ?; \
+  CALL UserAddOrEdit(@UserID,@name,@email, @password);";
+  pet_database.query(sql, [user.UserID, user.name, user.email, bcrypt.hashSync(user.password, 8)], (err, rows, fields) => {
+      if (!err)
+          rows.forEach(element => {
+              //if(element.constructor == Array) - 7/10
+              let token = jwt.sign({ id: UserID }, config.secret, {
+                expiresIn: 86400 // expires in 24 hours
+              })
+              res.status(200).send({ auth: true, token: token, user: user })
+              //res.send('user id : '+element[0].UserID) - 7/10
+          });
+      else
+          console.log(err);
+  })
+})
+//------------------------------------------
+
 // registering a new user
 router.post('/register', function (req, res) {
   db.insert([
@@ -113,6 +134,6 @@ router.post('/login', (req, res) => {
 //----------------------------------------------------
 // express server to make our application accessible
 app.use(router)
-const port = 3000 //process.env.PORT 
+const port = 3005 //process.env.PORT 
 app.listen(port)
 console.log('Gateway:', port)
