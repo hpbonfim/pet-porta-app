@@ -1,5 +1,5 @@
 #Dockerfile
-FROM node:8.12.0-jessie
+FROM node:carbon
 ENV NODE_ENV=production
 # use changes to package.json to force Docker not to use the cache
 # when we change our application's nodejs dependencies:
@@ -18,5 +18,5 @@ RUN npm run build && \
     rm -rf ./src
 
 # Expose ports (for orchestrators and dynamic reverse proxies)
-EXPOSE 8000
+EXPOSE 3001
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

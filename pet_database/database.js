@@ -6,11 +6,6 @@ const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
 const app = express()
 const router = express.Router()
-//board arduino const
-var EtherPort = require("etherport");
-const five = require("johnny-five")
-const board = new five.Board()//{port: new EtherPort(3030)}
-var global
 //sqlite db const
 //const DB = require('./db')
 //const db = new DB('sqlitedb')
@@ -45,21 +40,6 @@ pet_database.connect((err) => {
 })
 //----------------------------------------------------
 
-//----------------------------------------------------
-board.on("ready", function() {
-  const relay = new five.Led(5);
-    global = relay
-  this.repl.inject({
-    relay: relay
-  })
-})
-//opening the door
-router.post('/abrir', function(){
-  global.off()  
-  setTimeout(function(){
-        global.on()
-      }, 1000)
-})
 //----------------------------------------------------
 //3/11/2018
 router.post('/register', (req, res) => {
@@ -134,6 +114,7 @@ router.post('/login', (req, res) => {
 //----------------------------------------------------
 // express server to make our application accessible
 app.use(router)
-const port = 3005 //process.env.PORT 
+const port = 3003 || process.env.PORT
+
 app.listen(port)
 console.log('Gateway:', port)

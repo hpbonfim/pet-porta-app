@@ -6,19 +6,12 @@ var rules = convict({
     env: {
         doc: "The application environment.",
         format: ["production", "development", "test"],
-        default: "development",
+        default: "production",
         env: "NODE_ENV"
-    },
-    port: {
-        doc: "The port to bind.",
-        format: "port",
-        default: 8080,
-        env: "PORT",
-        arg: "port"
     },
     db: {
         host: {
-            doc: 'localhost',
+            doc: '0.0.0.0',
             format: '*',
             default: 'db',
             env: 'DB_HOST'
