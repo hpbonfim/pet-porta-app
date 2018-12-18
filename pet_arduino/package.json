@@ -12,6 +12,7 @@
     "etherport": "^0.2.0",
     "express": "^4.16.2",
     "johnny-five": "^1.0.0",
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.4",
+    "socket.io": "^2.2.0"
   }
 }
