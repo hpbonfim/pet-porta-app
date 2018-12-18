@@ -2,7 +2,7 @@
   "name": "pet-database ",
   "version": "1.0.0",
   "scripts": {
-    "start-docker": "node app.js",
+    "start-docker": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

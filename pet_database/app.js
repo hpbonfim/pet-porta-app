@@ -50,5 +50,5 @@ app.delete('/usuario/:usuarioId', usuario.delete)
 
 // listen for requests
 app.listen(port, () => {
-    console.log("server database: ", port);
+    console.log("pet_database server: ", port);
 })

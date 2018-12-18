@@ -34,7 +34,7 @@ services:
     container_name: mongo
     command: --smallfiles
     volumes:
-      - pet_db:/usr/src/pet_db
+      - pet-db:/usr/src/files
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: pass
@@ -61,23 +61,23 @@ services:
  
 
   # microserviço que oferece o front-end e solicita/envia requisições/respostas ao cliente
-  # pet_porta:
-  #  build: "./pet_porta/"
-  #  container_name: pet_porta
-  #  #depends_on:
-  #  #- pet_gateway
-  #  volumes:
-  #  - ./pet_porta/src:/usr/src/pet_porta/src
-  #  ports:
-  #  - "3001:3000"
+  pet_porta:
+    build: "./pet_porta/"
+    container_name: pet_porta
+    #depends_on:
+    #- pet_gateway
+    volumes:
+    - ./pet_porta/src:/usr/src/pet_porta/src
+    ports:
+    - "3001:3000"
   #  labels:
   #  - "traefik.enabled=true"
   #  - "traefik.frontend.rule=Host:pet_porta.localhost" 
   #  - "traefik.docker.network=pet_host"
-  #  networks:
-  #  - pet_host
-  #  entrypoint:
-  #  - /usr/local/bin/docker-entrypoint.sh
+    networks:
+    - pet_host
+    entrypoint:
+    - /usr/local/bin/docker-entrypoint.sh
   #  depends_on:
     #- pet_database
     #- pet_gateway
@@ -196,4 +196,4 @@ networks:
     external: true
 volumes:
   portainerdata:
-  pet_db:
+  pet-db:
