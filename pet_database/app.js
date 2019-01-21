@@ -33,19 +33,19 @@ app.get('/', (req, res) => {
 
 const usuario = require('./controller.js')
 
-// Create a new Note
-app.post('/usuario', usuario.create)
+// Create a new user
+app.post('/register', usuario.create)
 
-// Retrieve all Notes
+// Retrieve all users
 app.get('/usuarios', usuario.findAll)
 
-// Retrieve a single Note with noteId
+// login a single user with your ID
 app.get('/usuario/:usuarioId', usuario.findOne)
 
-// Update a Note with noteId
+// Update a user with your ID
 app.put('/usuario/:usuarioId', usuario.update)
 
-// Delete a Note with noteId
+// Delete a user with your ID
 app.delete('/usuario/:usuarioId', usuario.delete)
 
 // listen for requests

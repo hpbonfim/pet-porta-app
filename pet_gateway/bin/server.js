@@ -1,7 +1,8 @@
+// Gateway server API
 const app = require('../app');
 const debug = require('debug')('balta:server');
 const http = require('http');
-
+// normalize constants ports
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 

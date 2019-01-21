@@ -1,5 +1,5 @@
 #Dockerfile
-FROM node:latest
+FROM node:carbon
 ENV NODE_ENV=production
 # "layer" thats been cached will be used if possible
 WORKDIR /usr/src/pet_database

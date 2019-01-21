@@ -11,7 +11,7 @@
               <v-card-text>
                 <div>
                   <v-text-field v-model="email" type="text" name="Email" label="Email"></v-text-field>
-                  <v-text-field v-model="password" type="password" name="Senha" label="Senha"></v-text-field><br>
+                  <v-text-field v-model="senha" type="password" name="Senha" label="Senha"></v-text-field><br>
                 </div>
                 <v-divider></v-divider>
                 <div id="app" style="padding-top:1em">
@@ -31,14 +31,14 @@ export default {
   data () {
     return {
       email: '',
-      password: ''
+      senha: ''
     }
   },
   methods: {
     login: function () {
       const email = this.email
-      const password = this.password
-      this.$store.dispatch('login', { email, password })
+      const senha = this.senha
+      this.$store.dispatch('login', { email, senha })
         .then(() => this.$router.push('/dashboard'))
         .catch(err => console.log(err))
     }

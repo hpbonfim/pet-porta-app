@@ -42,8 +42,6 @@ services:
       - pet_host
     environment:
       - MONGODB_URI=mongodb://localhost:27017/pet-database
-#    depends_on:
-#      - mongo-express
 
   mongo-express:
     image: mongo-express:latest
@@ -116,40 +114,6 @@ services:
     depends_on:
     - mongo-express
     - mongo
-
-    # serve microserviço mysql para o pet_database
-  # mysql:
-  #  image: mysql
-  #  command: --default-authentication-plugin=mysql_native_password
-  #  container_name: mysql # diretorio para inserir os dados no banco
-  #  volumes:
-  #  - .pet_database:/usr/src/pet_database
-  #  labels:
-  #  - "traefik.enable=false"
-  #  - "traefik.docker.network=pet_host"
-  #  environment:
-  #  - DB_HOST=mysql
-  #  - DB_USER=root
-  #  - DB_NAME=${MYSQL_DATABASE}
-  #  - DB_PASSWORD=MYSQL_ALLOW_EMPTY_PASSWORD
-    # - DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
-  #  networks:
-  #  - pet_host
-
-   # servico para controle do banco de dados 
-  # adminer:
-  #  image: adminer
-  #  container_name: adminer
-  #  restart: always
-  #  networks:
-  #  - "traefik.enable=false"
-  #  - "trafik.docker.network=pet_host"
-  #  ports:
-  #    - 8080:8080
-  #  depends_on:
-  #  - mysql
-  #  networks:
-  #  - pet_host
 
   # serviço para controlar as requisiçoes entre o banco de dados e pet_gateway
   #socat:

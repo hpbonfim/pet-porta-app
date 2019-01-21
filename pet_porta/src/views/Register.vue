@@ -7,9 +7,10 @@
             <h2>Criar Usuário</h2>
               <v-flex>
                 <v-divider/>
-                <v-text-field xs12 v-model="name" label="Nome:"></v-text-field>
+                <v-text-field xs12 v-model="nome" label="Nome:"></v-text-field>
+                <v-text-field xs12 v-model="cpf" label="CPF:"></v-text-field>
                 <v-text-field xs12 v-model="email" label="Email:"></v-text-field>
-                <v-text-field xs12 v-model="password" label="Senha:"></v-text-field>
+                <v-text-field xs12 v-model="senha" label="Senha:"></v-text-field>
                 <v-text-field xs12 v-model="password_confirmation" label="Confirme sua senha"></v-text-field>
               </v-flex>
               <div id="app">
@@ -26,18 +27,20 @@
 export default {
   data () {
     return {
-      name: '',
+      nome: '',
+      cpf: '',
       email: '',
-      password: '',
+      senha: '',
       password_confirmation: ''
     }
   },
   methods: {
     register: function () {
       let data = {
-        name: this.name,
+        nome: this.nome,
+        cpf: this.cpf,
         email: this.email,
-        password: this.password
+        senha: this.senha
       }
       this.$store.dispatch('register', data)
         .then(() => this.$router.push('*'))
