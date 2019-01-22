@@ -41,7 +41,7 @@ services:
     networks:
       - pet_host
     environment:
-      - MONGODB_URI=mongodb://localhost:27017/pet-database
+      - MONGODB_URI=mongodb://localhost:27017/pet-porta
 
   mongo-express:
     image: mongo-express:latest
@@ -57,7 +57,6 @@ services:
     depends_on:
       - mongo
  
-
   # microserviço que oferece o front-end e solicita/envia requisições/respostas ao cliente
   pet_porta:
     build: "./pet_porta/"
@@ -76,10 +75,11 @@ services:
     - pet_host
     entrypoint:
     - /usr/local/bin/docker-entrypoint.sh
-  #  depends_on:
-    #- pet_database
-    #- pet_gateway
-  #  - traefik
+    depends_on:
+    - mongo-express
+    - mongo
+  # - pet_gateway
+  # - traefik
 
   # microserviço para ativar o arduino
   # pet_arduino:
@@ -99,21 +99,6 @@ services:
   #  depends_on:
   #    #- mysql
   #    - traefik
-
-  # microserviço para solicitar o banco de dados
-  pet_database:
-    build: "./pet_database/"
-    container_name: pet_database
-#    labels:
-#    - "traefik.enable=true"
-#    - "traefik.docker.network=pet_host"
-    ports:
-    - 3003:3000
-    networks:
-    - pet_host
-    depends_on:
-    - mongo-express
-    - mongo
 
   # serviço para controlar as requisiçoes entre o banco de dados e pet_gateway
   #socat:

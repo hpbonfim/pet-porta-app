@@ -1,5 +1,5 @@
 #Dockerfile
-FROM node:carbon
+FROM node:8.12.0
 ENV NODE_ENV=production
 # use changes to package.json to force Docker not to use the cache
 # when we change our application's nodejs dependencies:

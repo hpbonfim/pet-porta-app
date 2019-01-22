@@ -7,6 +7,7 @@
             <h2>Criar Usuário</h2>
               <v-flex>
                 <v-divider/>
+                <v-text-field xs12 v-model="token" label="Token:"></v-text-field> 
                 <v-text-field xs12 v-model="nome" label="Nome:"></v-text-field>
                 <v-text-field xs12 v-model="cpf" label="CPF:"></v-text-field>
                 <v-text-field xs12 v-model="email" label="Email:"></v-text-field>
@@ -27,6 +28,7 @@
 export default {
   data () {
     return {
+      token: '',
       nome: '',
       cpf: '',
       email: '',
@@ -37,6 +39,7 @@ export default {
   methods: {
     register: function () {
       let data = {
+        token: this.token,
         nome: this.nome,
         cpf: this.cpf,
         email: this.email,

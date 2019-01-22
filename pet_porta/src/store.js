@@ -60,10 +60,10 @@ export default new Vuex.Store({
     //   })
     // },
     // all requests for register
-    register ({ commit }, nome, email, cpf, senha) {
+    register ({ commit }, token, nome, email, cpf, senha) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
-        axios({ url: 'http://localhost:3003/register', data: nome, email, cpf, senha, method: 'POST' }) // this Post redirect to a cluster IP
+        axios({ url: 'http://172.18.0.5:3333/register', data: token, nome, email, cpf, senha, method: 'POST' }) // this Post redirect to a cluster IP
           .then(resp => {
             const token = resp.data.token
             const nome = resp.data.nome
