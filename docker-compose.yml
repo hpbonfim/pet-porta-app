@@ -14,6 +14,30 @@ services:
 #    - /root/traefik.toml:/traefik.toml
 #    - /root/acme.json:/acme.json
 
+
+# microservice docker nginx amplify
+#  nginx-amplify:
+#    build: "./docker-nginx-amplify/"
+#    container_name: nginx-board
+#    restart: always
+#    networks: 
+#      - backend
+
+# microservico para controle de todas as requisições (API - Application Process Interface)
+#  nginx:
+#    image: nginx:alpine
+#    container_name: API
+#    restart: unless-stopped
+#    tty: true
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    networks:
+#      - backend
+#    volumes:
+#      - ./:/usr/src/pet_porta/src
+#      - ./nginx.conf:/etc/nginx/nginx.conf
+
   # controlador dos containers
   portainer:
     image: portainer/portainer:latest
@@ -21,9 +45,7 @@ services:
     ports:
     - '9000:9000'
     networks: 
-    - pet_host
-    labels:
-    - "traefik.enable=false"
+    - backend
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     - portainerdata:/data
@@ -39,9 +61,9 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: pass
     networks:
-      - pet_host
+      - backend
     environment:
-      - MONGODB_URI=mongodb://localhost:27017/pet-porta
+      - MONGODB_URI=mongodb://localhost:27017/pet-database
 
   mongo-express:
     image: mongo-express:latest
@@ -49,37 +71,36 @@ services:
     restart: always
     ports:
       - '8081:8080'
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: pass
     networks:
-      - pet_host
+      - backend
     depends_on:
       - mongo
- 
-  # microserviço que oferece o front-end e solicita/envia requisições/respostas ao cliente
-  pet_porta:
-    build: "./pet_porta/"
-    container_name: pet_porta
-    #depends_on:
-    #- pet_gateway
-    volumes:
-    - ./pet_porta/src:/usr/src/pet_porta/src
+
+  # microserviço para solicitar o banco de dados
+  pet_database:
+    build: "./pet_database/"
+    container_name: pet_database
     ports:
-    - "3001:3000"
-  #  labels:
-  #  - "traefik.enabled=true"
-  #  - "traefik.frontend.rule=Host:pet_porta.localhost" 
-  #  - "traefik.docker.network=pet_host"
+      - 3333:3333
     networks:
-    - pet_host
-    entrypoint:
-    - /usr/local/bin/docker-entrypoint.sh
+      - backend
     depends_on:
-    - mongo-express
-    - mongo
-  # - pet_gateway
-  # - traefik
+      - mongo
+
+  #     # microserviço que oferece o front-end e solicita/envia requisições/respostas ao cliente
+  # pet_porta:
+  #   build: "./pet_porta/"
+  #   container_name: pet_porta
+  #   volumes:
+  #     - ./pet_porta/src:/usr/src/pet_porta/src
+  #   ports:
+  #     - "3001:3001"
+  #   networks:
+  #     - backend
+  #   entrypoint:
+  #     - /usr/local/bin/docker-entrypoint.sh
+  #   depends_on:
+  #     - nginx
 
   # microserviço para ativar o arduino
   # pet_arduino:
@@ -92,7 +113,7 @@ services:
   #  entrypoint:
   #    - /usr/local/bin/docker-entrypoint.sh
   #  networks:
-  #    - pet_host
+  #    - backend
   #  labels:
   #    - "traefik.enable=true"
   #    - "traefik.docker.network=pet_host"
@@ -100,49 +121,10 @@ services:
   #    #- mysql
   #    - traefik
 
-  # serviço para controlar as requisiçoes entre o banco de dados e pet_gateway
-  #socat:
-  #  image: alpine/socat
-  #  container_name: socat
-  #  command: tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock
-  #  volumes:
-  #  - /var/run/docker.sock:/var/run/docker.sock
-  #  networks:
-  #   - pet_host
-  #  depends_on:
-  #  - traefik
-
-  # microservico para controle de todas as requisições (API - Application Process Interface)
-  # pet_gateway:
-  #  build: "./pet_gateway/"
-  #  container_name: pet_gateway
-  #  command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
-  #  environment:
-  #  - API_HOST=${API_HOST}
-  #  - API_SERVER_PORT=${API_SERVER_PORT}
-  #  ports:
-  #  - "3000:3000"
-  #  expose:
-  #  - 3000
-  #  networks:
-  #  - pet_host
-  #  volumes:
-  #  - ./server/src:/usr/src/pet_gateway/src
-  # entrypoint:
-  #  - /usr/local/bin/docker-entrypoint.sh
-  #  labels:
-  #  - "traefik.enable=true"
-  #  - "traefik.backend.rule=Host:localhost"
-  #  - "traefik.docker.network=pet_host"
-  #  depends_on:
-  #  - pet_arduino
-  #  - pet_database
-  #  - mysql
-  #  - traefik
-
 networks:
-  pet_host:
+  backend:
     external: true
 volumes:
   portainerdata:
   pet-db:
+  nginx:

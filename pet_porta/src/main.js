@@ -8,12 +8,15 @@ import Axios from 'axios'
 import Vuetify from 'vuetify'
 
 Vue.prototype.$http = Axios
+Vue.use(Vuetify)
 
-const token = localStorage.getItem('user-token')
+const token = localStorage.getItem('user-token') // creates a cache with users
+
+// sents the token to a http server with auth key
 if (token) {
   Vue.prototype.$http.defaults.headers.common['Authorization'] = token
 }
-Vue.use(Vuetify)
+
 Vue.config.productionTip = false
 
 new Vue({

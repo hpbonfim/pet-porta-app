@@ -2,9 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store.js'
 import Secure from './components/Dashboard.vue'
-import About from './views/About.vue'
-import Login from './views/Login.vue'
-import Register from './views/Register.vue'
+import About from './views/about.vue'
+import Login from './views/login.vue'
+import Register from './views/register.vue'
 
 Vue.use(Router)
 

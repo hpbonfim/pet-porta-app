@@ -3,11 +3,15 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 Vue.use(Vuex)
+// VUEX - reactive module with (State - Mutations - Actions - Getters)
+// State - sends/receave all status of function
+// mutations - commits all changes in actions
+// Actions - Post/Get all http requests fowarding data for state/mutations
 
 export default new Vuex.Store({
   state: {
     status: '',
-    token: localStorage.getItem('token') || '',
+    token: localStorage.getItem('token'),
     user: {}
   },
   mutations: {
@@ -63,7 +67,7 @@ export default new Vuex.Store({
     register ({ commit }, token, nome, email, cpf, senha) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
-        axios({ url: 'http://172.18.0.5:3333/register', data: token, nome, email, cpf, senha, method: 'POST' }) // this Post redirect to a cluster IP
+        axios({ url: 'http://localhost:3333/register', data: token, nome, email, cpf, senha, method: 'POST' }) // this Post redirect to a cluster IP
           .then(resp => {
             const token = resp.data.token
             const nome = resp.data.nome
@@ -75,11 +79,13 @@ export default new Vuex.Store({
             axios.defaults.headers.common['Authorization'] = token
             commit('auth_success', token, nome, email, cpf, senha)
             resolve(resp)
+            console.log('data:', resp)
           })
           .catch(err => {
             commit('auth_error', err)
-            localStorage.removeItem('token')
+            localStorage.removeItem('token') //
             reject(err)
+            console.log('erro:', err)
           })
       })
     },
