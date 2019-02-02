@@ -80,49 +80,49 @@ services:
   pet_database:
     build: "./pet_database/"
     container_name: pet_database
+    networks:
+      - backend
     ports:
-      - 3333:3333
+      - "3033:3000"
+    depends_on:
+      - mongo
+      - mongo-express
+
+  # microserviço que oferece o front-end e solicita/envia requisições/respostas ao cliente
+  pet_porta:
+    build: "./pet_porta/"
+    container_name: pet_porta
+    volumes:
+      - ./pet_porta/src:/usr/src/pet_porta/src
+    ports:
+      - "3020:3000"
+    networks:
+      - backend
+      - frontend
+    entrypoint:
+      - /usr/local/bin/docker-entrypoint.sh
+    depends_on:
+      - pet_arduino
+      - pet_database
+
+  # microserviço para ativar o arduino
+  pet_arduino:
+    build: "./pet_arduino/"
+    container_name: pet_arduino
+    ports:
+      - "3333:3000"
+    command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
+    entrypoint:
+      - /usr/local/bin/docker-entrypoint.sh
     networks:
       - backend
     depends_on:
-      - mongo
-
-  #     # microserviço que oferece o front-end e solicita/envia requisições/respostas ao cliente
-  # pet_porta:
-  #   build: "./pet_porta/"
-  #   container_name: pet_porta
-  #   volumes:
-  #     - ./pet_porta/src:/usr/src/pet_porta/src
-  #   ports:
-  #     - "3001:3001"
-  #   networks:
-  #     - backend
-  #   entrypoint:
-  #     - /usr/local/bin/docker-entrypoint.sh
-  #   depends_on:
-  #     - nginx
-
-  # microserviço para ativar o arduino
-  # pet_arduino:
-  #  build: "./pet_arduino/"
-  #  container_name: pet_arduino
-  #  ports:
-  #    - 3002:3000
-  #  expose:
-  #    - 3002
-  #  entrypoint:
-  #    - /usr/local/bin/docker-entrypoint.sh
-  #  networks:
-  #    - backend
-  #  labels:
-  #    - "traefik.enable=true"
-  #    - "traefik.docker.network=pet_host"
-  #  depends_on:
-  #    #- mysql
-  #    - traefik
+      - portainer
 
 networks:
   backend:
+    external: true
+  frontend:
     external: true
 volumes:
   portainerdata:

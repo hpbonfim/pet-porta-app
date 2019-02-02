@@ -36,50 +36,56 @@ export default new Vuex.Store({
   },
   actions: {
     // request to open the door
-    // abrir ({ commit }) {
-    //   return new Promise(() => {
-    //     commit('porta_aberta')
-    //     axios({ url: 'http://localhost:3003/abrir', method: 'POST' }) // this Post ask to open the door
-    //   })
-    // },
+    abrir ({ commit }) {
+      return new Promise((resolve, reject) => {
+        commit('porta_aberta')
+        axios({ url: 'http://172.21.0.5:3333/toogle', method: 'POST' }) // this Post redirect to a cluster IP
+          .then(resp => {
+            console.log('resposta: ', resp)
+            resolve(resp)
+          })
+          .catch(err => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
     // ------------- // request for login
-    // login ({ commit }, user) {
-    //   return new Promise((resolve, reject) => {
-    //     commit('auth_request')
-    //     axios({ url: 'http://localhost:3003/login', data: user, method: 'POST' }) // this Post redirect to a cluster IP
-    //       .then(resp => {
-    //         const token = resp.data.token
-    //         const user = resp.data.user
-    //         localStorage.setItem('token', token)
-    //         // Add the following line:
-    //         axios.defaults.headers.common['Authorization'] = token
-    //         commit('auth_success', token, user)
-    //         resolve(resp)
-    //       })
-    //       .catch(err => {
-    //         commit('auth_error')
-    //         localStorage.removeItem('token')
-    //         reject(err)
-    //       })
-    //   })
-    // },
-    // all requests for register
-    register ({ commit }, token, nome, email, cpf, senha) {
+    login ({ commit }, nome, senha) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
-        axios({ url: 'http://localhost:3333/register', data: token, nome, email, cpf, senha, method: 'POST' }) // this Post redirect to a cluster IP
+        axios({ url: 'http://172.21.0.6:3033/usuario/:nome', data: nome, senha, method: 'POST' }) // this Post redirect to a cluster IP
+          .then(resp => {
+            const token = resp.data.token
+            const nome = resp.data.user
+            localStorage.setItem('token', token)
+            // Add the following line:
+            axios.defaults.headers.common['Authorization'] = token
+            commit('auth_success', token, nome)
+            console.log('resposta: ', resp)
+            resolve(resp)
+          })
+          .catch(err => {
+            commit('auth_error')
+            localStorage.removeItem('token')
+            reject(err)
+          })
+      })
+    },
+    // all requests for register
+    register ({ commit }, nome, email, cpf, senha) {
+      return new Promise((resolve, reject) => {
+        commit('auth_request')
+        axios({ url: 'http://172.21.0.6:3033/register', data: nome, email, cpf, senha, method: 'POST' }) // this Post redirect to a cluster IP
           .then(resp => {
             const token = resp.data.token
             const nome = resp.data.nome
-            const email = resp.data.email
-            const cpf = resp.data.cpf
-            const senha = resp.data.senha
             localStorage.setItem('token', token)
             // set a auth_token to new user:
             axios.defaults.headers.common['Authorization'] = token
-            commit('auth_success', token, nome, email, cpf, senha)
+            commit('auth_success', token, nome)
             resolve(resp)
-            console.log('data:', resp)
+            console.log('data response:', resp)
           })
           .catch(err => {
             commit('auth_error', err)
