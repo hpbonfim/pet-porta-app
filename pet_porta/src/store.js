@@ -39,7 +39,7 @@ export default new Vuex.Store({
     abrir ({ commit }) {
       return new Promise((resolve, reject) => {
         commit('porta_aberta')
-        axios({ url: 'http://172.21.0.5:3333/toogle', method: 'POST' }) // this Post redirect to a cluster IP
+        axios({ url: 'http://172.27.0.5:3333/time', method: 'POST' }) // this Post redirect to a cluster IP
           .then(resp => {
             console.log('resposta: ', resp)
             resolve(resp)
@@ -54,7 +54,7 @@ export default new Vuex.Store({
     login ({ commit }, nome, senha) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
-        axios({ url: 'http://172.21.0.6:3033/usuario/:nome', data: nome, senha, method: 'POST' }) // this Post redirect to a cluster IP
+        axios({ url: 'http://172.27.0.6:3033/usuarios/:usuarioID', data: nome, senha, method: 'POST' }) // this Post redirect to a cluster IP
           .then(resp => {
             const token = resp.data.token
             const nome = resp.data.user
@@ -67,7 +67,7 @@ export default new Vuex.Store({
           })
           .catch(err => {
             commit('auth_error')
-            localStorage.removeItem('token')
+            localStorage.removsudoeItem('token')
             reject(err)
           })
       })
@@ -76,7 +76,7 @@ export default new Vuex.Store({
     register ({ commit }, nome, email, cpf, senha) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
-        axios({ url: 'http://172.21.0.6:3033/register', data: nome, email, cpf, senha, method: 'POST' }) // this Post redirect to a cluster IP
+        axios({ url: 'http://172.27.0.6:3033/register', data: nome, email, cpf, senha, method: 'POST' }) // this Post redirect to a cluster IP
           .then(resp => {
             const token = resp.data.token
             const nome = resp.data.nome

@@ -18,5 +18,5 @@ RUN npm run build && \
     rm -rf ./src
 
 # Expose ports (for orchestrators and dynamic reverse proxies)
-EXPOSE 3001
+# EXPOSE 3001
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

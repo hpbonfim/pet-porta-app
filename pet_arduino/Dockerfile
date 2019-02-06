@@ -16,6 +16,6 @@ ADD . /usr/src/pet_arduino
 RUN cp docker-entrypoint.sh /usr/local/bin/ && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 # Expose ports (for orchestrators and dynamic reverse proxies)
-EXPOSE 3333
+# EXPOSE 3333
 # Start the app with secure shell cmd
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

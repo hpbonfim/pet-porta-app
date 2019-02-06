@@ -43,12 +43,13 @@ services:
     image: portainer/portainer:latest
     container_name: portainer
     ports:
-    - '9000:9000'
+      - '9000:9000'
     networks: 
-    - backend
+      - front
+      - back
     volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    - portainerdata:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainerdata:/data
 
  # teste com novo banco de dados 
   mongo:
@@ -61,7 +62,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: pass
     networks:
-      - backend
+      - back
     environment:
       - MONGODB_URI=mongodb://localhost:27017/pet-database
 
@@ -72,7 +73,8 @@ services:
     ports:
       - '8081:8080'
     networks:
-      - backend
+      - front
+      - back
     depends_on:
       - mongo
 
@@ -81,7 +83,7 @@ services:
     build: "./pet_database/"
     container_name: pet_database
     networks:
-      - backend
+      - back
     ports:
       - "3033:3000"
     depends_on:
@@ -95,10 +97,10 @@ services:
     volumes:
       - ./pet_porta/src:/usr/src/pet_porta/src
     ports:
-      - "3020:3000"
+      - "3000:3000"
     networks:
-      - backend
-      - frontend
+      - back
+      - front
     entrypoint:
       - /usr/local/bin/docker-entrypoint.sh
     depends_on:
@@ -115,16 +117,28 @@ services:
     entrypoint:
       - /usr/local/bin/docker-entrypoint.sh
     networks:
-      - backend
+      - back
+#      - backend
     depends_on:
       - portainer
 
 networks:
-  backend:
-    external: true
-  frontend:
-    external: true
+  front:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.20.10.0/16"
+  back:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.21.7.0/16"
+  #backend:
+  #  internal: true
+  #frontend:
+  #  external: true
 volumes:
   portainerdata:
   pet-db:
-  nginx:

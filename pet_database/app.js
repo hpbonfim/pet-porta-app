@@ -36,16 +36,15 @@ mongoose.connect(dbConfig.url, {
 
 // define a simple route
 app.get('/', (req, res) => {
-    //res.json({"title": "PET_DATABASE"});
+    console.log('OK')
+    res.sendStatus(200)
 })
-// public route
-app.use('/users', validateUser, users)
 
 // Create a new user
 app.post('/register', usuario.create)
 
 // Retrieve all users
-app.get('/usuarios', validadeUser, usuario.findAll)
+app.get('/usuarios', usuario.findAll)
 
 // login a single user with your Nome
 app.get('/teste/:nome', usuario.findbyNome)
@@ -84,7 +83,7 @@ function validateUser(req, res, next) {
     if(err.status === 404)
      res.status(404).json({message: "Not found"});
     else 
-      res.status(500).json({message: "Something looks wrong :( !!!"});
+      res.status(500).json({message: "Something looks wrong :( !"});
   });
 
 // listen for requests

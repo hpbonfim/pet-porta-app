@@ -9,6 +9,7 @@ const songs = require('j5-songs')
 const board = new five.Board({ repl: false })//port: new EtherPort(3030)
 let buzzer, melody
 var relay
+
  // CORS Middleware
 app.use(cors())
 // parse requests of content-type - application/x-www-form-urlencoded
