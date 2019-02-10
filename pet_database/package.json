@@ -2,19 +2,20 @@
   "name": "pet-database",
   "version": "1.0.0",
   "scripts": {
-    "start-docker": "nodemon app.js",
+    "start-docker": "nodemon database.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^3.0.3",
+    "bcrypt": "^3.0.4",
     "body-parser": "^1.18.2",
     "cors": "^2.8.5",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.4.0",
-    "mongoose": "^5.4.9",
+    "mongoose": "^5.4.10",
+    "morgan": "^1.9.1",
     "nodemon": "^1.18.9"
   }
 }

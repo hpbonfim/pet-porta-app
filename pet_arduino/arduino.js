@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3333
+const port = 3000
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const EtherPort = require("etherport")
@@ -18,7 +18,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 app.use(express.static(__dirname))
-
 //Test
 app.get('/test',(req, res) => {
   console.log('Online')
@@ -30,8 +29,8 @@ app.get('/test',(req, res) => {
     melody = songs.load("mario-intro")
     console.log('play:', melody)
     buzzer.play(melody)
-    res.sendStatus(200)
   })
+  res.sendStatus(200)
 })
 
 app.get('/time', (req, res) => {
@@ -50,13 +49,16 @@ app.get('/abrir',(req, res) => {
 
 app.get('/on', function(req, res) {
   board.on('ready', function() {
-    var relay = new five.Relay(10)
+    var relay = new five.Relay({
+      type: 'NC',
+      pin: 13
+    })
     board.repl.inject({
       relay: relay
     })
     relay.toggle()
-    return res.sendStatus(200)
   })    
+  res.sendStatus(200)
 })
 
 // ------------------------------------------------------------

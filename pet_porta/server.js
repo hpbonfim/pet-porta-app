@@ -1,12 +1,13 @@
 // app global config
+const bodyParser = require('body-parser')
 const express = require('express')
 const router = express.Router()
-const PORT = 3000
-const bodyParser = require('body-parser')
-const app = express()
 const cors = require('cors')
+const app = express()
 // http server config
 const http = require('http')
+const server = http.createServer(app)
+const PORT = 3000
 
 // --------------------------------------------- start APP config
 app.use(cors()) // CORS middleware
@@ -15,7 +16,6 @@ app.use(bodyParser.urlencoded({ extended: true })) // parse requests of content-
 app.use('/', express.static(`${__dirname}/dist`)) // set the static files location for the static html
 app.use('/', router) // run all config and express on "/"
 
-const server = http.createServer(app)
 server.listen(PORT)
 
-console.log(`pet_porta server: ${PORT}`)
+console.log(`Pet_Porta Running on :${PORT}`)

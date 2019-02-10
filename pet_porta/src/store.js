@@ -3,99 +3,103 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 Vue.use(Vuex)
-// VUEX - reactive module with (State - Mutations - Actions - Getters)
-// State - sends/receave all status of function
-// mutations - commits all changes in actions
-// Actions - Post/Get all http requests fowarding data for state/mutations
 
 export default new Vuex.Store({
   state: {
+    // PORTA states
+    // USER states
     status: '',
-    token: localStorage.getItem('token'),
-    user: {}
+    token: localStorage.getItem('token') || '',
+    user: {},
+    // TODO states
+    activities: []
   },
   mutations: {
-    porta_aberta (state) {
-      state.status = 'Porta Aberta'
+    // TODO mutation
+    addActivity (state, activity) {
+      state.activities.push(activity)
     },
-    auth_request (state) { // see if all request on the client size it's be suppress
+    deleteActivity (state, activity) {
+      state.activities = state.activities.filter((val) => val !== activity)
+    },
+    changeActivityState (state, activity) {
+      state.activities.map((val) => {
+        if (val.name === activity.name) {
+          const aux = !val.completed
+          val.completed = aux
+        }
+        return val
+      })
+    },
+    // USER mutation
+    auth_request (state) {
       state.status = 'loading'
     },
-    auth_success (state, token, user) { // auth === true
+    auth_success (state, token, user) {
       state.status = 'success'
       state.token = token
       state.user = user
     },
-    auth_error (state) { // auth error
+    auth_error (state) {
       state.status = 'error'
     },
-    logout (state) { // auth null
+    logout (state) {
       state.status = ''
       state.token = ''
     }
   },
   actions: {
-    // request to open the door
-    abrir ({ commit }) {
-      return new Promise((resolve, reject) => {
-        commit('porta_aberta')
-        axios({ url: 'http://172.27.0.5:3333/time', method: 'POST' }) // this Post redirect to a cluster IP
-          .then(resp => {
-            console.log('resposta: ', resp)
-            resolve(resp)
-          })
-          .catch(err => {
-            console.log(err)
-            reject(err)
-          })
-      })
+    // TODO actions
+    addActivity ({ commit }, { activity }) {
+      commit('addActivity', activity)
     },
-    // ------------- // request for login
-    login ({ commit }, nome, senha) {
+    deleteActivity ({ commit }, { activity }) {
+      commit('deleteActivity', activity)
+    },
+    changeActivityState ({ commit }, { activity }) {
+      commit('changeActivityState', activity)
+    },
+    // USER actions
+    login ({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
-        axios({ url: 'http://172.27.0.6:3033/usuarios/:usuarioID', data: nome, senha, method: 'POST' }) // this Post redirect to a cluster IP
+        axios({ url: 'http://localhost:3000/login', data: user, method: 'POST' })
           .then(resp => {
             const token = resp.data.token
-            const nome = resp.data.user
+            const user = resp.data.user
             localStorage.setItem('token', token)
             // Add the following line:
             axios.defaults.headers.common['Authorization'] = token
-            commit('auth_success', token, nome)
-            console.log('resposta: ', resp)
+            commit('auth_success', token, user)
             resolve(resp)
           })
           .catch(err => {
             commit('auth_error')
-            localStorage.removsudoeItem('token')
+            localStorage.removeItem('token')
             reject(err)
           })
       })
     },
-    // all requests for register
-    register ({ commit }, nome, email, cpf, senha) {
+    register ({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
-        axios({ url: 'http://172.27.0.6:3033/register', data: nome, email, cpf, senha, method: 'POST' }) // this Post redirect to a cluster IP
+        axios({ url: 'http://localhost:3000/register', data: user, method: 'POST' })
           .then(resp => {
             const token = resp.data.token
-            const nome = resp.data.nome
+            const user = resp.data.user
             localStorage.setItem('token', token)
-            // set a auth_token to new user:
+            // Add the following line:
             axios.defaults.headers.common['Authorization'] = token
-            commit('auth_success', token, nome)
+            commit('auth_success', token, user)
             resolve(resp)
-            console.log('data response:', resp)
           })
           .catch(err => {
             commit('auth_error', err)
-            localStorage.removeItem('token') //
+            localStorage.removeItem('token')
             reject(err)
-            console.log('erro:', err)
           })
       })
     },
-    // all requests for logout
     logout ({ commit }) {
       return new Promise((resolve, reject) => {
         commit('logout')
@@ -106,6 +110,11 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    // TODO getters
+    getActivities (state) {
+      return state.activities
+    },
+    // USER getters
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status
   }

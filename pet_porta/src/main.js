@@ -1,21 +1,15 @@
+import '@babel/polyfill'
 import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import './registerServiceWorker'
-import Axios from 'axios'
-import Vuetify from 'vuetify'
-
-Vue.prototype.$http = Axios
-Vue.use(Vuetify)
-
-const token = localStorage.getItem('user-token') // creates a cache with users
-
-// sents the token to a http server with auth key
-if (token) {
-  Vue.prototype.$http.defaults.headers.common['Authorization'] = token
-}
+// TODO App
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import locale from 'element-ui/lib/locale/lang/en'
+Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 

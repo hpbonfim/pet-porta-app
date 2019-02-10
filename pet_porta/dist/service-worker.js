@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.30b01d2483568deffe42fc5dad6ca00d.js"
+  "/precache-manifest.edc1b4d44a8e9a2aaad7a173da935576.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "pet_porta_app"});

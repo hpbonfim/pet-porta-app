@@ -3,24 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start-docker": "nodemon server.js && start",
+    "start": "nodemon server.js && start",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test:e2e": "vue-cli-service test:e2e",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.0.0-rc.1",
     "axios": "^0.18.0",
-    "body-parser": "^1.18.2",
     "cors": "^2.8.5",
-    "express": "^4.16.2",
-    "mongoose": "^5.3.16",
-    "nodemon": "^1.18.5",
-    "register-service-worker": "^1.0.0",
-    "vue": "^2.5.17",
-    "vue-loader": "^15.5.1",
+    "element-ui": "^2.4.11",
+    "moment": "^2.23.0",
+    "nodemon": "^1.18.10",
+    "register-service-worker": "^1.6.0",
+    "vue": "^2.6.4",
     "vue-router": "^3.0.1",
     "vuetify": "^1.3.0",
     "vuex": "^3.0.1"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
   },
   "devDependencies": {
     "@vue/cli-plugin-eslint": "^3.3.0",
@@ -29,5 +35,8 @@
     "@vue/eslint-config-standard": "^3.0.5",
     "vue-cli-plugin-vuetify": "^0.4.6",
     "vue-template-compiler": "^2.5.22"
+  },
+  "resolutions": {
+    "ajv": "6.8.1"
   }
 }

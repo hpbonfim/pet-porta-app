@@ -1,51 +1,58 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Start from './components/Auth/Index.vue'
+import Dashboard from './components/Auth/Dashboard.vue'
+
+// import Login from './views/Home.vue'
+
+import Login from './components/Login.vue'
+import Register from './components/Register.vue'
 import store from './store.js'
-import Secure from './components/Dashboard.vue'
-import About from './views/about.vue'
-import Login from './views/login.vue'
-import Register from './views/register.vue'
 
 Vue.use(Router)
 
 let router = new Router({
   mode: 'history',
   routes: [
-    // otherwise redirect to home
-    { path: '*', redirect: '/' },
+    { path: '*', redirect: '/login' },
     {
       path: '/',
+      name: 'Index',
+      component: Start
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard
+    },
+    {
+      path: '/login',
       name: 'login',
       component: Login
     },
     {
-      path: '/register',
+      path: '/cadastrar',
       name: 'register',
       component: Register
-    },
-    {
-      path: '/dashboard',
-      name: 'secure',
-      component: Secure,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: About
     }
+    // {
+    // path: '/secure',
+    // name: 'secure',
+    // component: Secure
+    // meta: {
+    //  requiresAuth: true
+    // }
+    // }
   ]
 })
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isLoggedIn) { // check if isLoggedIn == state.token == true
+    if (store.getters.isLoggedIn) {
       next()
       return
     }
-    next('*')
+    next('/login')
   } else {
     next()
   }

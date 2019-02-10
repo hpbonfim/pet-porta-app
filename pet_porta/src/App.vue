@@ -1,21 +1,28 @@
 <template>
   <v-app>
     <div id="app">
-      <div id="nav">
-      <router-link to="/login">Login</router-link> |    
-      <router-link to="/about">About</router-link> 
-      </div>
     <router-view/>
-     <v-footer dark height="auto" absolute>
+     <!--v-footer dark height="auto" absolute>
         <v-card class="flex" flat tile>
             <v-divider></v-divider>
           <strong>PET - Sistemas >></strong>
-            &copy;2018
+            &copy;2019
         </v-card>
-      </v-footer>
+      </v-footer-->
     </div>
   </v-app>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+    }
+  },
+  computed: {
+  }
+}
+</script>
 <style>
 #app {
 font-family: 'Avenir', Helvetica, Arial, sans-serif;

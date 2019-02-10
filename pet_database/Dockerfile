@@ -6,6 +6,7 @@ ADD package.json /tmp/package.json
 # installing the node_modules 
 RUN cd /tmp && npm install --only=production && \
     npm cache clean --force
+    
 RUN mkdir -p /usr/src/pet_database && cp -a /tmp/node_modules /usr/src/pet_database
 # "layer" thats been cached will be used if possible
 WORKDIR /usr/src/pet_database
@@ -19,6 +20,6 @@ RUN npm install && \
 RUN cp docker-entrypoint.sh /usr/local/bin/ && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 # Expose ports (for orchestrators and dynamic reverse proxies)
-EXPOSE 3333
+# EXPOSE 3333
 # Start the app
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
