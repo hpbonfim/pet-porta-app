@@ -19,6 +19,15 @@ app.use(bodyParser.json())
 
 app.use(express.static(__dirname))
 //Test
+board.on("ready", function() {
+  buzzer = new five.Piezo({
+    type: 'NC',
+    pin: 4
+  })
+  melody = songs.load("mario-intro")
+  console.log('play:', melody)
+  buzzer.play(melody)
+
 app.get('/test',(req, res) => {
   console.log('Online')
   board.on("ready", function() {

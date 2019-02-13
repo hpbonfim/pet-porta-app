@@ -1,144 +1,113 @@
-version: '3.7'
+version: "3.7"
 services:
-  # microservico para controle de todas as requisições (API - Application Process Interface)
-  nginx:
-    image: nginx:alpine
-    container_name: API
-    restart: unless-stopped
-    tty: true
-    ports:
-    - "8080:8080"
-    networks:
-    - back
-    volumes:
-    # - ./usr/src/pet_porta:/srv/www/static
-    - ./pet_porta/:/srv/www/static
-    - ./default.conf:/etc/nginx/conf.d/default.conf
-
-  redis:
-    image: redis:4.0.5-alpine
-    command: ["redis-server", "--appendonly", "yes"]
-    hostname: redis
-    expose:
-    - 6379
-    networks:
-    - back
-    volumes:
-    - redis-data:/data
+  # redis:
+  #   image: redis:4.0.5-alpine
+  #   command: ["redis-server", "--appendonly", "yes"]
+  #   hostname: redis
+  #   expose:
+  #   - 6379
+  #   networks:
+  #   - back
+  #   volumes:
+  #   - redis-data:/data
 
   # controlador dos containers
   portainer:
     image: portainer/portainer:latest
     container_name: portainer
     ports:
-    - '9000:9000'
-    networks: 
-    - back
+      - "9000:9000"
+    networks:
+      - back
     volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    - portainerdata:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainerdata:/data
 
-  # teste com novo banco de dados 
+  # teste com novo banco de dados
   mongo:
     image: mongo:latest
     container_name: mongo
     command: --smallfiles
     volumes:
-    - pet-db:/usr/src/files
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: pass
+      - pet:/data
     networks:
-    - back
-    environment:
-    - MONGODB_URI=mongodb://localhost:27017/pet-gateway
+      - back
 
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-board
     restart: always
     ports:
-    - '8081:8080'
+      - "8081:8080"
     networks:
-    - back
+      - back
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: dev
+      ME_CONFIG_BASICAUTH_PASSWORD: pass
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
     depends_on:
-    - mongo
+      - mongo
 
   # microserviço para tratar todas as requisiçoes
   pet_gateway:
     build: "./pet_gateway/"
     container_name: pet_gateway
     networks:
-    - back
+      - back
     ports:
-    - "3005:3000"
+      - "3000:3000"
     depends_on:
-    - mongo
-    - mongo-express
-
-  # microserviço para solicitar o banco de dados
-  pet_database:
-    build: "./pet_database/"
-    container_name: pet_database
-    networks:
-    - back
-    ports:
-    - "3002:3000"
-    depends_on:
-    - mongo
-    - mongo-express
+      - mongo
+      - mongo-express
 
   # microserviço que oferece o front-end e solicita/envia requisições/respostas ao cliente
   pet_porta:
     build: "./pet_porta/"
     container_name: pet_porta
     volumes:
-    - ./pet_porta/src:/usr/src/pet_porta/src
+      - ./pet_porta/src:/usr/src/pet_porta/src
     ports:
-    - "3000:3000"
+      - "3001:3000"
     networks:
-    - back
+      - frontend
+      - back
     entrypoint:
-    - /usr/local/bin/docker-entrypoint.sh
-    depends_on:
-    - redis
-    - pet_arduino
-    - pet_database
-    environment:
-    - RHOST=redis
+      - /usr/local/bin/docker-entrypoint.sh
 
-  # microserviço para ativar o arduino
-  pet_arduino:
-    build: "./pet_arduino/"
-    container_name: pet_arduino
-    ports:
-    - "3001:3000"
-    command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
-    entrypoint:
-    - /usr/local/bin/docker-entrypoint.sh
-    networks:
-    - back
-    depends_on:
-    - portainer
+  # # microserviço para ativar o arduino
+  # pet_arduino:
+  #   build: "./pet_arduino/"
+  #   container_name: pet_arduino
+  #   ports:
+  #   - "3003:3000"
+  #   command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
+  #   entrypoint:
+  #   - /usr/local/bin/docker-entrypoint.sh
+  #   networks:
+  #   - back
+  #   depends_on:
+  #   - portainer
 
 networks:
-  front:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: "172.20.10.0/16"
+  # front:
+  #   driver: bridge
+  #   ipam:
+  #     driver: default
+  #     config:
+  #       - subnet: "172.20.10.0/16"
   back:
     driver: bridge
     ipam:
       driver: default
       config:
-        - subnet: "172.21.7.0/16"
+        - subnet: "172.27.7.0/16"
   #backend:
   #  internal: true
-  #frontend:
-  #  external: true
+  frontend:
+    external: true
 volumes:
   portainerdata:
-  pet-db:
-  redis-data:
+  pet:
+  # redis-data:

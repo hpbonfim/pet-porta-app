@@ -14,10 +14,10 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.edc1b4d44a8e9a2aaad7a173da935576.js"
+  "/precache-manifest.b63c62eb22f97feb17f2f7eb4c63f970.js"
 );
 
-workbox.core.setCacheNameDetails({prefix: "pet_porta_app"});
+workbox.core.setCacheNameDetails({prefix: "pet_porta"});
 
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to
