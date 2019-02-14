@@ -14,6 +14,7 @@
     "express": "^4.16.2",
     "j5-songs": "0.0.9",
     "johnny-five": "^1.0.0",
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.10",
+    "socket.io": "^2.2.0"
   }
 }

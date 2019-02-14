@@ -1,59 +1,60 @@
 version: "3.7"
 services:
-  # redis:
-  #   image: redis:4.0.5-alpine
-  #   command: ["redis-server", "--appendonly", "yes"]
-  #   hostname: redis
-  #   expose:
-  #   - 6379
-  #   networks:
-  #   - back
-  #   volumes:
-  #   - redis-data:/data
+    # redis:
+    #   image: redis:4.0.5-alpine
+    #   command: ["redis-server", "--appendonly", "yes"]
+    #   hostname: redis
+    #   expose:
+    #   - 6379
+    #   networks:
+    #   - back
+    #   volumes:
+    #   - redis-data:/data
 
   # controlador dos containers
   portainer:
     image: portainer/portainer:latest
+    restart: always
     container_name: portainer
     ports:
-      - "9000:9000"
+    - "9000:9000"
     networks:
-      - back
+    - back
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainerdata:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+    - portainerdata:/data
 
   # teste com novo banco de dados
   mongo:
     image: mongo:latest
     container_name: mongo
+    restart: always
     command: --smallfiles
     volumes:
-      - pet:/data
+    - pet:/data
     networks:
-      - back
+    - back
 
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-board
     restart: always
     ports:
-      - "8081:8080"
+    - "8080:8080"
     networks:
-      - back
+    - back
     environment:
       ME_CONFIG_BASICAUTH_USERNAME: dev
       ME_CONFIG_BASICAUTH_PASSWORD: pass
-      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
-      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+    # ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
     depends_on:
-      - mongo
+    - mongo
 
   # microserviço para tratar todas as requisiçoes
   pet_gateway:
     build: "./pet_gateway/"
     container_name: pet_gateway
+    restart: always
     networks:
       - back
     ports:
@@ -66,8 +67,7 @@ services:
   pet_porta:
     build: "./pet_porta/"
     container_name: pet_porta
-    volumes:
-      - ./pet_porta/src:/usr/src/pet_porta/src
+    restart: always
     ports:
       - "3001:3000"
     networks:
@@ -76,19 +76,19 @@ services:
     entrypoint:
       - /usr/local/bin/docker-entrypoint.sh
 
-  # # microserviço para ativar o arduino
-  # pet_arduino:
-  #   build: "./pet_arduino/"
-  #   container_name: pet_arduino
-  #   ports:
-  #   - "3003:3000"
-  #   command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
-  #   entrypoint:
-  #   - /usr/local/bin/docker-entrypoint.sh
-  #   networks:
-  #   - back
-  #   depends_on:
-  #   - portainer
+  # microserviço para ativar o arduino
+  pet_arduino:
+      build: "./pet_arduino/"
+      container_name: pet_arduino
+      ports:
+      - "3300:3000"
+      command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
+      entrypoint:
+      - /usr/local/bin/docker-entrypoint.sh
+      networks:
+      - back
+      depends_on:
+      - portainer
 
 networks:
   # front:
