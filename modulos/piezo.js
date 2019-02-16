@@ -5,9 +5,9 @@ const songs = require('j5-songs')
 board.on("ready", function() {
   buzzer = new five.Piezo({
     type: 'NC',
-    pin: 9
+    pin: 10
   })
-  melody = songs.load('nyan-intro')
+  melody = songs.load('mario-intro')
   console.log('play:', melody)
-  buzzer.play(melody)
+  exports.buzzer.play(melody)
 })

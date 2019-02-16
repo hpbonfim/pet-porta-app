@@ -2,7 +2,7 @@
   "name": "pet-arduino",
   "version": "0.1.0",
   "scripts": {
-    "start-docker": "nodemon arduino.js && start"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "Henrique Paulo Bonfim",
@@ -15,6 +15,7 @@
     "j5-songs": "0.0.9",
     "johnny-five": "^1.0.0",
     "nodemon": "^1.18.10",
+    "request": "^2.88.0",
     "socket.io": "^2.2.0"
   }
 }

@@ -20,10 +20,8 @@ export default {
       this.$router.push('login')
     },
     logout () {
-      //this.$store.dispatch('clearTodos')
-      this.$store.dispatch('destroyToken').then(response => {
-        this.$router.push('login')
-      })
+      this.$store.dispatch('destroyToken')
+      this.$router.push('login')
     }
   }
 }

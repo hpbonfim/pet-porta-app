@@ -13,6 +13,7 @@ let router = new Router({
     path: '*',
     redirect: '/login'
   },
+  // USER routes
   {
     path: '/',
     name: 'Index',

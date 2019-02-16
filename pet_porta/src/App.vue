@@ -11,7 +11,7 @@
       </div>
     <v-content>
       <router-view/>
-      <index v-if="loggedIn()"></index>
+      <index v-if="loggedIn()" reload() ></index>
     </v-content>
   </v-app>
 </template>
@@ -28,6 +28,9 @@ export default {
   methods: {
     loggedIn () {
       return this.$store.getters.loggedIn
+    },
+    reload () {
+      location.reload()
     }
   },
   computed: {}

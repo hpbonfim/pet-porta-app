@@ -2,8 +2,8 @@
   <v-container fluid>
       <v-card-title>
         <v-layout column align-center>
-            <div class="button" @click="comment"><img height="100" src="../../assets/ClickHereHand.gif">
-              <div class="outer">
+            <div class="button" @click="abrir()"><img height="100" src="../../assets/ClickHereHand.gif">
+              <div class="outer" @click="comment">
                 <div class="height">
                   <div class="inner">
                       <v-responsive><img height="100" src="../../assets/pet.png"></v-responsive>
@@ -48,18 +48,11 @@ export default {
           return ` ${contents.split(' ').map(v => v.charAt(0)).join('')}`
         })
       })
-
       this.input = null
     },
     abrir () {
       this.$store.dispatch('abrir')
-    },
-    logout () {
-      this.$store.dispatch('clearTodos')
-      this.$store.dispatch('destroyToken')
-        .then(response => {
-          this.$router.push('login')
-        })
+      console.log('Abriu')
     }
   }
 }

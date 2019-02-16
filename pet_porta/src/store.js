@@ -59,7 +59,7 @@ export default new Vuex.Store({
     openDoor ({ commit }, token, user) {
       return new Promise((resolve, reject) => {
         axios({
-          url: 'http://localhost:3303/time',
+          url: 'http://localhost:3300/abrir',
           method: 'GET'
         })
           .then(resp => {

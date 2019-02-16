@@ -4,58 +4,120 @@ const express = require('express')
 const cors = require('cors')
 const port = 3300
 const app = express()
-const server = require('http').Server(app)
-const io = require('socket.io')(server)
-// Arduino Config
+const http = require('http')
+const songs = require('j5-songs')
 const five = require("johnny-five")
-// const EtherPort = require("etherport")
-const relay = require('./modules/relay')
+const server = http.createServer(app)
+const EtherPort = require("etherport")
+var request = require('request');
 
-const board = new five.Board({
-  repl: false,
-  debug: false,
-  //port: new EtherPort(3030)
-})
-// simple CORS Middleware
-app.use(cors())
-// 2 ways parser (JSON/XML)
+//------------------------------------------ Arduino Modules
+//---------------------------------------------//
+app.use(cors()) // simple CORS Middleware
 app.use(bodyParser.urlencoded({ extended: true })) // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.json()) // parse requests of content-type - application/json
-
 app.use(express.static(__dirname))
+//---------------------------------------------//
 
-app.get('/test',(req, res) => {
-  console.log('Online')
-  res.sendStatus(200)
+app.get('/time', (req, res) => {
+  const time = (new Date()).toLocaleTimeString()
+  res.status(200).send(`Hora: ${time}`)
 })
 
-io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' })
-  socket.on('my other event', function (data) {
-    console.log(data)
-  })
-})
+// function getQuote() {
+//   return new Promise(function(resolve, reject) {
+//     request('http://ron-swanson-quotes.herokuapp.com/v2/quotes', 
+//       function(error, response, body) {
+//         if (error) return reject(error);
+//         resolve(body)
+//     });
+//   });
+// }
 
-board.on("message", function(event) {
-  app.get('/time', (req, res) => {
-    const time = (new Date()).toLocaleTimeString()
-    res.status(404).send(`Hora: ${time}`)
-  })
-  app.get('/', (req, res) => {
-    res.sendStatus(200)
-  })
-  /*
-  Event {
-    type: "info"|"warn"|"fail",
-    timestamp: Time of event in milliseconds,
-      class: name of relevant component class,
-      message: message [+ ...detail]
+// async function main() {
+//   try {
+//     var quote = await getQuote();
+//     console.log(quote);
+//   } catch(error) {
+//     console.error(error);
+//   }
+// }
+
+// main();
+
+//---------------------------------------------//
+async function whatever() { 
+    // wait 3 seconds
+    await new Promise(function(resolve, reject) {
+      board = new five.Board({repl: false, debug: false /*port: new EtherPort(3030)*/}),
+      console.log('arduino online'),
+      setTimeout(resolve, 3000)
+    })
+      
+      board.on('ready',() => {
+        let relay = new five.Relay({ pin: 11, type: "NC" })
+        let buzzer = new five.Piezo({ type: 'NC', pin: 10 })
+        let touch = new five.Button({ pin: 9, holdtime: 5000 })
+        let rgb = new five.Led.RGB([6, 5, 3])
+        relay.off()
+        
+        app.get('/abrir', (req, res) => {
+          relay.on()
+          setTimeout(() => { relay.off() }, 500)
+            melody = songs.load('mario-intro')
+            buzzer.play(melody)
+                res.sendStatus(200)
+              })
+              
+              app.get('/piscar', (req, res) => {
+          rgb.color(255,0,0)
+          board.wait(1000, ()=>{
+              rgb.color('green')
+              board.wait(1000, ()=>{
+                rgb.color('#0000ff')
+              })
+            })   
+            setTimeout(() => {rgb.off(), res.sendStatus(200)}, 3000)
+          })
+          
+          // app.get('/intro', (req, res) => {
+        //   var entrada = songs.load('starwars-theme')
+        //     buzzer.play(entrada)
+        //       setTimeout(() => { buzzer.stop(), res.status(200).send('{"abriu":"true"}')}, 9000)
+        // })
+        
+        // Button config
+        touch.on("press", function() {
+          rgb.blink()    
+          relay.on()
+              setTimeout(() => { relay.off() }, 500)
+              melody = songs.load('mario-intro')
+              buzzer.play(melody)
+              console.log("Botão Pressionado!")
+              setTimeout(() => { rgb.stop(), rgb.off()}, 1000)
+            })
+            
+            touch.on("release", function() {
+              relay.off()
+            console.log("Released!")
+          })
+          
+          touch.on("hold", function() {
+            relay.off()
+            var entrada = songs.load('starwars-theme')
+            buzzer.play(entrada)
+            setTimeout(() => { buzzer.stop() }, 9000)  
+            console.log("Holding...")
+          })
+        })
+        return new Promise(function(resolve, reject) {
+      })
     }
-  */
- console.log("Received a %s message, from %s, reporting: %s", event.type, event.class, event.message);
-})
-// ------------------------------------------------------------
-server.listen(port, function() {
-  console.log("Arduino port: ",port)
-})
-// ----------------------------------------------------
+    whatever()
+    //---------------------------------------------//
+    server.listen(port, function() {
+      console.log("Arduino port: ",port)
+    })
+    //---------------------------------------------//
+    
+    

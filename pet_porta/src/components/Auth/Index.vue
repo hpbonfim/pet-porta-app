@@ -8,26 +8,22 @@
     <v-bottom-nav :active.sync="bottomNav" :color="color" :value="true" absolute dark shift>
       <v-btn dark v-model="perfil">
         <span>Perfil</span>
-        <v-icon>fas fa-user-circle</v-icon>
-      </v-btn>
-      <v-btn dark v-model="porta">
-        <span>Porta</span>
-        <v-icon>fas fa-door-open</v-icon>
+        <v-icon>account_box</v-icon>
       </v-btn>
 
-      <v-btn dark>
-        <span>Chat</span>
-        <v-icon>fas fa-comments</v-icon>
+      <v-btn dark v-model="porta">
+        <span>Porta</span>
+        <v-icon>touch_app</v-icon>
       </v-btn>
 
       <v-btn dark v-model="anotar">
-        <span>TODO</span>
-        <v-icon>fas fa-edit</v-icon>
+        <span>Anotações</span>
+        <v-icon>note_add</v-icon>
       </v-btn>
 
       <v-btn dark v-model="sair">
         <span>Sair</span>
-        <v-icon>fas fa-times-circle</v-icon>
+        <v-icon>exit_to_app</v-icon>
       </v-btn>
     </v-bottom-nav>
   </v-app>

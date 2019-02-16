@@ -1,7 +1,3 @@
-upstream yournodeapp {
-  server localhost:3001 fail_timeout=0;
-  keepalive 60;
-}
 
 server {
   server_name localhost;
@@ -14,6 +10,11 @@ server {
     try_files $uri @yournodeapp;
   }
 
+  upstream yournodeapp {
+    server localhost:3001 fail_timeout=0;
+    keepalive 60;
+  }
+  
   location @yournodeapp {
     proxy_pass http://yournodeapp;
     proxy_set_header Host $host;

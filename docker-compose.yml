@@ -1,15 +1,41 @@
 version: "3.7"
 services:
-    # redis:
-    #   image: redis:4.0.5-alpine
-    #   command: ["redis-server", "--appendonly", "yes"]
-    #   hostname: redis
-    #   expose:
-    #   - 6379
-    #   networks:
-    #   - back
-    #   volumes:
-    #   - redis-data:/data
+  # redis:
+  #   image: redis:4.0.5-alpine
+  #   command: ["redis-server", "--appendonly", "yes"]
+  #   hostname: redis
+  #   expose:
+  #   - 6379
+  #   networks:
+  #   - back
+  #   volumes:
+  #   - redis-data:/data
+  # microservice docker nginx amplify
+
+  #  nginx-amplify:
+  #    build: "./docker-nginx-amplify/"
+  #    container_name: nginx-board
+  #    restart: always
+  #    networks: 
+  #      - backend
+
+  # # microservico para controle de todas as requisições (API - Application Process Interface)
+  #   nginx:
+  #     image: nginx
+  #     container_name: nginx
+  #     restart: always
+  #     volumes:
+  #     - /var/run/docker.sock:/tmp/docker.sock:ro
+  #     # - ./:/usr/src/pet_porta/src
+  #     # - ./nginx.conf:/etc/nginx/nginx.conf
+  #     #- ./usr/src/pet_porta/src:/var/www/html
+  #     # - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
+  #     - ./conf.d:/etc/nginx
+  #     ports:
+  #     - "80:80"
+  #     - "443:443"
+  #     networks:
+  #     - back
 
   # controlador dos containers
   portainer:
@@ -19,6 +45,7 @@ services:
     ports:
     - "9000:9000"
     networks:
+    - front
     - back
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
@@ -46,7 +73,6 @@ services:
     environment:
       ME_CONFIG_BASICAUTH_USERNAME: dev
       ME_CONFIG_BASICAUTH_PASSWORD: pass
-    # ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
     depends_on:
     - mongo
 
@@ -71,42 +97,42 @@ services:
     ports:
       - "3001:3000"
     networks:
-      - frontend
+      - front
       - back
     entrypoint:
       - /usr/local/bin/docker-entrypoint.sh
+    depends_on:
+      - pet_gateway
 
   # microserviço para ativar o arduino
   pet_arduino:
-      build: "./pet_arduino/"
-      container_name: pet_arduino
-      ports:
-      - "3300:3000"
-      command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
-      entrypoint:
-      - /usr/local/bin/docker-entrypoint.sh
-      networks:
-      - back
-      depends_on:
-      - portainer
+     build: "./pet_arduino/"
+     container_name: pet_arduino
+     ports:
+     - "3300:3000"
+     command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
+     entrypoint:
+     - /usr/local/bin/docker-entrypoint.sh
+     networks:
+     - back
 
 networks:
-  # front:
-  #   driver: bridge
-  #   ipam:
-  #     driver: default
-  #     config:
-  #       - subnet: "172.20.10.0/16"
+  front:
+    driver: bridge
+    external: true
+    ipam:
+       driver: default
+       config:
+         - subnet: "172.20.10.0/16"
+
   back:
     driver: bridge
+    internal: true
     ipam:
       driver: default
       config:
         - subnet: "172.27.7.0/16"
   #backend:
-  #  internal: true
-  frontend:
-    external: true
 volumes:
   portainerdata:
   pet:
