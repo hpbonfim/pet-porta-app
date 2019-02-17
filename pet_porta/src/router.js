@@ -11,7 +11,7 @@ let router = new Router({
   mode: 'history',
   routes: [{
     path: '*',
-    redirect: '/login'
+    redirect: '/logar'
   },
   // USER routes
   {
@@ -23,7 +23,7 @@ let router = new Router({
     }
   },
   {
-    path: '/login',
+    path: '/logar',
     name: 'login',
     component: Login
   },

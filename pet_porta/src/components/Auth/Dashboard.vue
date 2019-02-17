@@ -51,8 +51,7 @@ export default {
       this.input = null
     },
     abrir () {
-      this.$store.dispatch('abrir')
-      console.log('Abriu')
+      this.$store.dispatch('openDoor')
     }
   }
 }

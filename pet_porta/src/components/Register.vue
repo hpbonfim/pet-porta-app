@@ -117,11 +117,11 @@ export default {
       }
       this.$store
         .dispatch('register', data)
-        .then(() => this.$router.push('/login'))
+        .then(() => this.$router.push('/logar'))
         .catch(err => console.log(err), console.log(data))
     },
     retornar () {
-      this.$router.push('/login')
+      this.$router.push('/logar')
     }
   }
 }

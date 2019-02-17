@@ -17,11 +17,11 @@ export default {
   data: () => ({}),
   methods: {
     logoutDev () {
-      this.$router.push('login')
+      this.$router.push('logar')
     },
     logout () {
       this.$store.dispatch('destroyToken')
-      this.$router.push('login')
+      this.$router.push('logar')
     }
   }
 }

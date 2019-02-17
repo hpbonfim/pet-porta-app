@@ -56,21 +56,19 @@ export default new Vuex.Store({
   },
   actions: {
     // Arduino Actions
-    openDoor ({ commit }, token, user) {
+    openDoor ({ commit }) {
       return new Promise((resolve, reject) => {
-        axios({
-          url: 'http://localhost:3300/abrir',
-          method: 'GET'
-        })
-          .then(resp => {
-            commit('opening', token, user)
-            resolve(resp)
-            console.log(resp)
+        axios.get('http://localhost:3000/abrir')
+          .then(function (response) {
+            // handle success
+            commit('is_open')
+            resolve(response)
+            console.log(response)
           })
-          .catch(err => {
-            commit('auth_error', err)
-            localStorage.removeItem('token')
-            reject(err)
+          .catch(function (error) {
+            reject(error)
+            // handle error
+            console.log(error)
           })
       })
     },
@@ -121,7 +119,6 @@ export default new Vuex.Store({
             const token = resp.data.token
             const user = resp.data.user
             localStorage.setItem('token', token)
-            // Add the following line:
             axios.defaults.headers.common['Authorization'] = token
             commit('auth_success', token, user)
             resolve(resp)

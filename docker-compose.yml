@@ -45,8 +45,7 @@ services:
     ports:
     - "9000:9000"
     networks:
-    - front
-    - back
+    - backend
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     - portainerdata:/data
@@ -60,16 +59,16 @@ services:
     volumes:
     - pet:/data
     networks:
-    - back
+    - backend
 
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-board
     restart: always
     ports:
-    - "8080:8080"
+    - "8081:8080"
     networks:
-    - back
+    - backend
     environment:
       ME_CONFIG_BASICAUTH_USERNAME: dev
       ME_CONFIG_BASICAUTH_PASSWORD: pass
@@ -82,7 +81,7 @@ services:
     container_name: pet_gateway
     restart: always
     networks:
-      - back
+      - backend
     ports:
       - "3000:3000"
     depends_on:
@@ -97,8 +96,7 @@ services:
     ports:
       - "3001:3000"
     networks:
-      - front
-      - back
+      - backend
     entrypoint:
       - /usr/local/bin/docker-entrypoint.sh
     depends_on:
@@ -106,32 +104,26 @@ services:
 
   # microserviço para ativar o arduino
   pet_arduino:
-     build: "./pet_arduino/"
-     container_name: pet_arduino
-     ports:
-     - "3300:3000"
-     command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
-     entrypoint:
-     - /usr/local/bin/docker-entrypoint.sh
-     networks:
-     - back
+    build: "./pet_arduino/"
+    container_name: pet_arduino
+    ports:
+    - "3003:3000"
+    privileged: true
+    devices:
+    - /dev:/dev
+    #command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
+    entrypoint:
+    - /usr/local/bin/docker-entrypoint.sh
+    networks:
+    - backend
 
 networks:
-  front:
+  backend:
     driver: bridge
-    external: true
-    ipam:
-       driver: default
-       config:
-         - subnet: "172.20.10.0/16"
-
-  back:
-    driver: bridge
-    internal: true
     ipam:
       driver: default
       config:
-        - subnet: "172.27.7.0/16"
+        - subnet: "172.20.0.0/16"
   #backend:
 volumes:
   portainerdata:
