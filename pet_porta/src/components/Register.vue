@@ -62,8 +62,8 @@
                     ></v-text-field>
                     <v-checkbox v-model="checkbox" :rules="[v => !!v]" label="Tudo OK!?" required></v-checkbox>
                     <v-divider/>
-                    <br>c
-                    <v-btn class="button" dark color="#000077" @click="registrar()">
+                    <br>
+                    <v-btn class="button" dark color="#000077" v-if="checkbox" @click="registrar()">
                       <v-icon>save</v-icon>
                     </v-btn>
                     <v-btn class="button" dark color="#696969" @click="retornar()">
@@ -95,6 +95,7 @@ export default {
     checkbox: false,
     mostrarSenha: false,
     confirmarSenha: false,
+    tudoOK: false,
     rules: {
       required: value => !!value || 'Obrigatório.',
       min: v => v.length >= 8 || 'Min 8 chars',
@@ -108,6 +109,12 @@ export default {
   }),
 
   methods: {
+    // validar () {
+    //   if (this.name >= 8) {
+    //     if (this.email != rules.emailValid) {
+    //     }
+    //   }
+    // },
     registrar () {
       let data = {
         name: this.name,
@@ -118,7 +125,7 @@ export default {
       this.$store
         .dispatch('register', data)
         .then(() => this.$router.push('/logar'))
-        .catch(err => console.log(err), console.log(data))
+        .catch(err => console.log(err))
     },
     retornar () {
       this.$router.push('/logar')

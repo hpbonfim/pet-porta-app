@@ -1,6 +1,4 @@
 //routes
-const productRoutes = require("./api/routes/products")
-const orderRoutes = require("./api/routes/orders")
 const userRoutes = require("./api/routes/user")
 // Configuring the database
 const bodyParser = require("body-parser")
@@ -11,16 +9,14 @@ const app = express()
 //http calls
 const db = require("./database.config.js")
 const mongoose = require("mongoose")
+const axios = require('axios')
 const http = require("http")
 const port = 3000
 
 // app.use(cors()); // CORS middleware
 app.use(morgan("dev"))
-app.use("/uploads", express.static("uploads"))
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({
-  extended: false
-}))
+app.use(bodyParser.urlencoded({  extended: false }))
 // parse requests of content-type - application/json
 app.use(bodyParser.json())
 
@@ -37,12 +33,6 @@ mongoose
     process.exit()
   })
 
-// define a simple route
-app.get("/", (req, res) => {
-  console.log("OK")
-  res.sendStatus(200)
-})
-
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
   res.header(
@@ -57,9 +47,18 @@ app.use((req, res, next) => {
 })
 
 // Routes to handle requests
-app.use("/products", productRoutes)
-app.use("/orders", orderRoutes)
 app.use("/user", userRoutes)
+app.use('/abrir', (req, res, next) => {
+  axios.get('http://172.20.0.7:3003/abrir')
+  .then(response => {
+    res.status(200)
+    console.log(response)
+  })
+  .catch(error => {
+    console.log(error)
+    next(error)
+  })
+})
 
 app.use((req, res, next) => {
   const error = new Error("Not found")
@@ -80,7 +79,6 @@ app.use((error, req, res, next) => {
 
 const server = http.createServer(app)
 
-// listen for requests
 server.listen(port, () => {
   console.log("pet_database server: ", port)
 })

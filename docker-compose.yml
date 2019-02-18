@@ -1,42 +1,5 @@
 version: "3.7"
 services:
-  # redis:
-  #   image: redis:4.0.5-alpine
-  #   command: ["redis-server", "--appendonly", "yes"]
-  #   hostname: redis
-  #   expose:
-  #   - 6379
-  #   networks:
-  #   - back
-  #   volumes:
-  #   - redis-data:/data
-  # microservice docker nginx amplify
-
-  #  nginx-amplify:
-  #    build: "./docker-nginx-amplify/"
-  #    container_name: nginx-board
-  #    restart: always
-  #    networks: 
-  #      - backend
-
-  # # microservico para controle de todas as requisições (API - Application Process Interface)
-  #   nginx:
-  #     image: nginx
-  #     container_name: nginx
-  #     restart: always
-  #     volumes:
-  #     - /var/run/docker.sock:/tmp/docker.sock:ro
-  #     # - ./:/usr/src/pet_porta/src
-  #     # - ./nginx.conf:/etc/nginx/nginx.conf
-  #     #- ./usr/src/pet_porta/src:/var/www/html
-  #     # - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
-  #     - ./conf.d:/etc/nginx
-  #     ports:
-  #     - "80:80"
-  #     - "443:443"
-  #     networks:
-  #     - back
-
   # controlador dos containers
   portainer:
     image: portainer/portainer:latest
@@ -75,32 +38,37 @@ services:
     depends_on:
     - mongo
 
-  # microserviço para tratar todas as requisiçoes
-  pet_gateway:
-    build: "./pet_gateway/"
-    container_name: pet_gateway
-    restart: always
-    networks:
-      - backend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mongo
-      - mongo-express
-
   # microserviço que oferece o front-end e solicita/envia requisições/respostas ao cliente
   pet_porta:
     build: "./pet_porta/"
     container_name: pet_porta
     restart: always
     ports:
-      - "3001:3000"
+      - "3020:3000"
     networks:
-      - backend
+      frontend:
+      backend:
+        ipv4_address: 172.20.0.20
+        ipv6_address: 2001:3984:3989::20
     entrypoint:
       - /usr/local/bin/docker-entrypoint.sh
     depends_on:
       - pet_gateway
+
+  # microserviço para tratar todas as requisiçoes
+  pet_gateway:
+    build: "./pet_gateway/"
+    container_name: pet_gateway
+    restart: always
+    networks:
+      backend:
+        ipv4_address: 172.20.0.5
+        ipv6_address: 2001:3984:3989::5
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+      - mongo-express
 
   # microserviço para ativar o arduino
   pet_arduino:
@@ -115,7 +83,9 @@ services:
     entrypoint:
     - /usr/local/bin/docker-entrypoint.sh
     networks:
-    - backend
+      backend:
+        ipv4_address: 172.20.0.7
+        ipv6_address: 2001:3984:3989::7
 
 networks:
   backend:
@@ -123,9 +93,10 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: "172.20.0.0/16"
-  #backend:
+      - subnet: 172.20.0.0/24
+      - subnet: 2001:3984:3989::/64
+  frontend:
+    external: true
 volumes:
   portainerdata:
   pet:
-  # redis-data:

@@ -5,7 +5,7 @@
         <v-slide-y-transition mode="out-in">
           <v-layout column align-center>
             <v-responsive>
-              <img height="100" src="../assets/pet.png">
+              <img height="100" src="../assets/logo.png">
               <br>
               <img height="50" src="../assets/peet.png">
               <br>
@@ -102,7 +102,7 @@ export default {
           password: this.password
         })
         .then(response => {
-          this.$router.push({ name: '/' })
+          this.$router.push({ name: '/' }, location.reload())
         })
         .catch(err => console.log(err))
     }

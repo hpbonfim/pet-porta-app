@@ -59,13 +59,13 @@ export default new Vuex.Store({
     openDoor ({ commit }) {
       return new Promise((resolve, reject) => {
         axios.get('http://localhost:3000/abrir')
-          .then(function (response) {
+          .then((response) => {
             // handle success
             commit('is_open')
             resolve(response)
             console.log(response)
           })
-          .catch(function (error) {
+          .catch((error) => {
             reject(error)
             // handle error
             console.log(error)
@@ -74,12 +74,15 @@ export default new Vuex.Store({
     },
     // TODO actions
     addActivity ({ commit }, { activity }) {
+      // TODO POST
       commit('addActivity', activity)
     },
     deleteActivity ({ commit }, { activity }) {
+      // TODO DELETE
       commit('deleteActivity', activity)
     },
     changeActivityState ({ commit }, { activity }) {
+      // TODO PUT
       commit('changeActivityState', activity)
     },
     // USER actions

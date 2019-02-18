@@ -16,12 +16,9 @@
 export default {
   data: () => ({}),
   methods: {
-    logoutDev () {
-      this.$router.push('logar')
-    },
     logout () {
       this.$store.dispatch('destroyToken')
-      this.$router.push('logar')
+      this.$router.push('/logar')
     }
   }
 }

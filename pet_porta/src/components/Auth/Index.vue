@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <profile v-if="perfil"></profile>
+  <v-app >
+    <profile  v-if="perfil"></profile>
     <dashboard v-if="porta"></dashboard>
     <logout v-if="sair"></logout>
     <todo v-if="anotar"></todo>
@@ -51,10 +51,6 @@ export default {
     }
   },
   computed: {
-    loggedIn () {
-      return this.$store.getters.loggedIn
-    },
-    // eslint-disable-next-line
     color () {
       switch (this.bottomNav) {
         case 0: return 'dark'

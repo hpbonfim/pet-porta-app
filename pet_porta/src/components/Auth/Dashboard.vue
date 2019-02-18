@@ -6,7 +6,7 @@
               <div class="outer" @click="comment">
                 <div class="height">
                   <div class="inner">
-                      <v-responsive><img height="100" src="../../assets/pet.png"></v-responsive>
+                      <v-responsive><img height="100" src="../../assets/logo.png"></v-responsive>
                     </div>
                   </div>
                 </div>
