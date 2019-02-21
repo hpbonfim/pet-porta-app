@@ -24,7 +24,7 @@ app.use(bodyParser.json())
 mongoose.Promise = global.Promise
 
 mongoose
-  .connect(db.url)
+  .connect(db.url, { useMongoClient: true })
   .then(() => {
     console.log("conectado com sucesso")
   })
@@ -32,7 +32,24 @@ mongoose
     console.log("Erro ao connectar", err)
     process.exit()
   })
-
+  
+  app.use('/abrir', (next) => {
+    const url = 'http://172.20.0.7:3003/abrir'
+    abrirPorta(url)
+    return next()
+  })
+  
+  async function abrirPorta(url) {
+    try{
+      const res = await axios.get(url)
+      console.log(res)
+    } 
+    catch(err) {
+      console.log(err)
+      next(err)
+    }
+  }
+  
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
   res.header(
@@ -48,17 +65,8 @@ app.use((req, res, next) => {
 
 // Routes to handle requests
 app.use("/user", userRoutes)
-app.use('/abrir', (req, res, next) => {
-  axios.get('http://172.20.0.7:3003/abrir')
-  .then(response => {
-    res.status(200)
-    console.log(response)
-  })
-  .catch(error => {
-    console.log(error)
-    next(error)
-  })
-})
+
+
 
 app.use((req, res, next) => {
   const error = new Error("Not found")
@@ -66,6 +74,7 @@ app.use((req, res, next) => {
   console.log(error)
   next(error)
 })
+
 
 app.use((error, req, res, next) => {
   res.status(error.status || 500)
@@ -77,8 +86,11 @@ app.use((error, req, res, next) => {
   })
 })
 
+
 const server = http.createServer(app)
 
+
+
 server.listen(port, () => {
-  console.log("pet_database server: ", port)
+console.log("pet_gateway server: ", port)
 })

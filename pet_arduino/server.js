@@ -10,6 +10,7 @@ const five = require("johnny-five")
 const server = http.createServer(app)
 const EtherPort = require("etherport")
 let board, error
+
 //---------------------------------------------//
 app.use(cors()) // simple CORS Middleware
 app.use(bodyParser.urlencoded({ extended: true })) // parse requests of content-type - application/x-www-form-urlencoded
@@ -34,7 +35,7 @@ app.use(bodyParser.json()) // parse requests of content-type - application/json
 //------------------------------------------ Arduino Modules
 function connectar (){
   return new Promise((resolve, reject) => {
-    board = new five.Board({repl: false, debug: false /*port: new EtherPort(3030)*/})
+    board = new five.Board({repl: false /*port: new EtherPort(3030)*/})
     setTimeout(() => {
       error = false
       if(!error){
@@ -54,28 +55,18 @@ function arduino() {
       board.on('ready',() => {
         let relay = new five.Relay({ pin: 10, type: "NC" })
         relay.off()
-        let touch = new five.Button({ pin: 9, holdtime: 5000 })
-        let buzzer = new five.Piezo({ type: 'NC', pin: 8 })
-        let rgb = new five.Led.RGB([6, 5, 3])
-        rgb.color(255,0,0)
-        board.wait(1000, ()=>{
-          rgb.color('green')
-          board.wait(1000, ()=>{
-            rgb.color('#0000ff')
-          })
-        })   
-        setTimeout(() => {rgb.off()}, 3000)
+        // let touch = new five.Button({ pin: 9, holdtime: 5000 })
 
-        app.get('/abrir', (req, res) => {
+        app.use('/abrir', (req, res, next) => {
           relay.on()
+          var tempo = new Date()
           setTimeout(() => { relay.off() }, 1000)
-          melody = songs.load('mario-intro')
-          buzzer.play(melody)
-          setTimeout(() => { buzzer.stop() }, 9000)  
-          console.log("Aberto em: ",time)
+          console.log("Aberto em: ",tempo)
           res.sendStatus(200)
           resolve()
+          next()
         })
+        console.log('ok')
               
         // app.use('/piscar', (req, res) => {
         //   rgb.color(255,0,0)
@@ -89,29 +80,24 @@ function arduino() {
         // })
           
 //--------------------------------------------- Button config
-          touch.on("press", function() {
-            rgb.blink()    
+/*          touch.on("press", function() {
             relay.on()
             setTimeout(() => { relay.off() }, 500)
-            melody = songs.load('starwars-theme')
-            buzzer.play(melody)
-            console.log("Botão Pressionado!")
-            setTimeout(() => { rgb.stop(), rgb.off()}, 8000)
-            setTimeout(() => { buzzer.stop() }, 9000)  
+            var time = new Date()
+            console.log("Botão Pressionado!", time)
           })
             
           touch.on("release", function() {
               relay.off()
-            console.log("Released!")
+            console.log("Botão Solto!")
           })
           
           touch.on("hold", function() {
             relay.off()
-            var entrada = songs.load('starwars-theme')
-            buzzer.play(entrada)
-            console.log("Holding...")
+            console.log("Segurando...")
           })
-//---------------------------------------------
+*/
+      //---------------------------------------------
       })
       if(!error){
         resolve()
