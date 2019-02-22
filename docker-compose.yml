@@ -79,7 +79,6 @@ services:
     privileged: true
     devices:
     - /dev:/dev
-    #command: -t -i --device=/dev/bus/usb/003/017 ubuntu bash
     entrypoint:
     - /usr/local/bin/docker-entrypoint.sh
     networks:
@@ -97,6 +96,7 @@ networks:
       - subnet: 2001:3984:3989::/64
   frontend:
     external: true
+    
 volumes:
   portainerdata:
   pet:
