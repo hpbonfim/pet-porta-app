@@ -17,7 +17,7 @@ export default {
   data: () => ({}),
   methods: {
     logout () {
-      this.$store.dispatch('destroyToken')
+      this.$store.dispatch('logout')
       this.$router.push('/logar')
     }
   }

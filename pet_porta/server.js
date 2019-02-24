@@ -17,4 +17,4 @@ app.use('/', express.static(`${__dirname}/dist`)) // set the static files locati
 app.use('/', router) // run all config and express on "/"
 
 server.listen(PORT)
-console.log(`pet_porta Running on :${PORT}`)
+console.log(`pet_porta running on :${PORT}`)

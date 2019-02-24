@@ -47,11 +47,12 @@ export default new Vuex.Store({
       state.user = user
     },
     auth_error (state) {
+      state.token = null
       state.status = 'error'
     },
     logout (state) {
-      state.status = ''
-      state.token = ''
+      state.status = null
+      state.token = null
     }
   },
   actions: {
@@ -63,12 +64,12 @@ export default new Vuex.Store({
             // handle success
             commit('is_open')
             resolve(response)
-            console.log(response)
+            //console.log(response)
           })
           .catch((error) => {
             reject(error)
             // handle error
-            console.log(error)
+            //console.log(error)
           })
       })
     },
@@ -139,6 +140,7 @@ export default new Vuex.Store({
         localStorage.removeItem('token')
         delete axios.defaults.headers.common['Authorization']
         resolve()
+        this.$router.push('/logar')
       })
     }
   },
