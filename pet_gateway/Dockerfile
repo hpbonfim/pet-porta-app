@@ -1,5 +1,5 @@
 #Dockerfile
-FROM node:8.12.0
+FROM node:10.15.1
 ENV NODE_ENV=production
 # copy package.json to a temporary folder
 ADD package.json /tmp/package.json
@@ -12,6 +12,7 @@ RUN mkdir -p /usr/src/pet_database && cp -a /tmp/node_modules /usr/src/pet_datab
 WORKDIR /usr/src/pet_database
 # copy package.json to a temporary folder
 ADD . /usr/src/pet_database
+ADD nodemon.json /usr/src/pet_database
 ADD docker-entrypoint.sh /usr/src/pet_database
 # installing the node_modules 
 RUN npm install && \

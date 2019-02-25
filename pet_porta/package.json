@@ -4,24 +4,26 @@
   "author": "Henrique P Bonfim",
   "private": true,
   "scripts": {
-    "start": "nodemon server.js",
+    "start-docker": "nodemon server.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "vue": "^2.6.6",
-    "vue-chat-scroll": "^1.3.5",
-    "vue-router": "^3.0.1",
-    "vuetify": "^1.3.0",
-    "vuex": "^3.0.1",
-    "register-service-worker": "^1.5.2",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "element-ui": "^2.4.11",
+    "jsonwebtoken": "^8.5.0",
+    "jwt-express": "^1.1.0",
     "moment": "^2.23.0",
     "nodemon": "^1.18.10",
-    "socket.io-client": "^2.2.0"
+    "register-service-worker": "^1.5.2",
+    "socket.io-client": "^2.2.0",
+    "vue": "^2.6.6",
+    "vue-chat-scroll": "^1.3.5",
+    "vue-router": "^3.0.1",
+    "vuetify": "^1.3.0",
+    "vuex": "^3.0.1"
   },
   "postcss": {
     "plugins": {

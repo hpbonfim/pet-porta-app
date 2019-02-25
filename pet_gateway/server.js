@@ -36,7 +36,7 @@ mongoose
   app.use('/abrir', (next) => {
     const url = 'http://172.20.0.7:3003/abrir'
     abrirPorta(url)
-    return next()
+    return res.send(200).next()
   })
   
   async function abrirPorta(url) {

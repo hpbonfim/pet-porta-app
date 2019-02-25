@@ -1,25 +1,29 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import jwt from 'jsonwebtoken'
+import { decode } from 'punycode';
+const fs = require('fs')
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     // GLOBAL states
+    //,
     status: '',
-    // USER states
-    token: localStorage.getItem('token') || '',
-    user: {},
+    // USER states //localStorage.getItem('token') || ''
+    token: localStorage.getItem('token'),
+    //user: {},
     // TODO states
     activities: []
   },
   mutations: {
     // Arduino Mutation
-    is_open (state, token, user) {
+    is_open (state, token) {
       state.status = 'opening'
       state.token = token
-      state.user = user
+      //state.user = user
     },
     // TODO mutation
     addActivity (state, activity) {
@@ -41,12 +45,13 @@ export default new Vuex.Store({
     auth_request (state) {
       state.status = 'loading'
     },
-    auth_success (state, token, user) {
+    auth_success (state, token) {
       state.status = 'success'
       state.token = token
-      state.user = user
+      //state.user = user
     },
     auth_error (state) {
+      //state.user = null
       state.token = null
       state.status = 'error'
     },
@@ -64,12 +69,12 @@ export default new Vuex.Store({
             // handle success
             commit('is_open')
             resolve(response)
-            //console.log(response)
+            console.log(response)
           })
           .catch((error) => {
             reject(error)
             // handle error
-            //console.log(error)
+            console.log(error)
           })
       })
     },
@@ -87,6 +92,19 @@ export default new Vuex.Store({
       commit('changeActivityState', activity)
     },
     // USER actions
+    // checkToken({commit}){
+    //   var checkToken = token
+    //   var anotherToken = localStorage.getItem('token')
+    //   if(checkToken !== axios.defaults.headers.common['Authorization'] || checkToken !== anotherToken){
+    //     commit('auth_error')
+    //     delete axios.defaults.headers.common['Authorization']
+    //     localStorage.removeItem('token')
+    //     this.$router.push('/logar')
+    //     return true
+    //   }else {
+    //     return false
+    //   }
+    // },
     login ({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
@@ -96,40 +114,37 @@ export default new Vuex.Store({
           method: 'POST'
         })
           .then(resp => {
-            const token = resp.data.token
-            const user = resp.data.user
-            localStorage.setItem('token', token)
-            // Add the following line:
+            let token = resp.data.token
             axios.defaults.headers.common['Authorization'] = token
-            commit('auth_success', token, user)
-            resolve(resp)
-          })
-          .catch(err => {
-            commit('auth_error')
-            localStorage.removeItem('token')
-            reject(err)
+              jwt.verify(token, 'pet-secret', function(err, decoded) {
+                if (err) {
+                console.log(err)
+                }
+                localStorage.setItem('token', decoded)
+                localStorage.setItem('token', token)
+                commit('auth_success', token)
+                resolve(resp)
+              })
+            })
+            .catch(err => {
+              commit('auth_error')
+              localStorage.removeItem('token')
+              reject(err)
           })
       })
     },
     register ({ commit }, user) {
       return new Promise((resolve, reject) => {
-        commit('auth_request')
         axios({
           url: 'http://localhost:3000/user/register',
           data: user,
           method: 'POST'
         })
           .then(resp => {
-            const token = resp.data.token
-            const user = resp.data.user
-            localStorage.setItem('token', token)
-            axios.defaults.headers.common['Authorization'] = token
-            commit('auth_success', token, user)
             resolve(resp)
           })
           .catch(err => {
             commit('auth_error', err)
-            localStorage.removeItem('token')
             reject(err)
           })
       })

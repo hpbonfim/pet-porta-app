@@ -1,12 +1,13 @@
 #Dockerfile
-FROM node:8.12.0
+FROM node:10.15.1
 ENV NODE_ENV=production
 # use changes to package.json to force Docker not to use the cache
 # when we change our application's nodejs dependencies:
 ADD package.json /tmp/package.json
-RUN cd /tmp && npm install --only=production
+RUN cd /tmp && npm install -g @vue/cli && npm install --only=production
 RUN mkdir -p /usr/src/pet_porta && cp -a /tmp/node_modules /usr/src/pet_porta
 WORKDIR /usr/src/pet_porta
+ADD nodemon.json /usr/src/pet_porta
 ADD . /usr/src/pet_porta
 # Entrypoint script
 RUN cp docker-entrypoint.sh /usr/local/bin/ && \

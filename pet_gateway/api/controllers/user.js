@@ -67,17 +67,15 @@ exports.user_login = (req, res, next) => {
                 //else
                 if (result) {
                     const token = jwt.sign({
+                            userId: user[0]._id,
+                            username: user[0].username,
+                            name: user[0].name,
                             email: user[0].email,
-                            userId: user[0]._id
                         },
-                        process.env.JWT_KEY, {
-                            expiresIn: "1h"
-                        }
+                        'pet-secret'
+                        //process.env.JWT_KEY
                     )
-                    return res.status(200).json({
-                        message: "Autorizado xD",
-                        token: token
-                    })
+                    return res.status(200).send({"access_token":  token})
                 }
                 res.status(401).json({
                     message: "Não permitido"

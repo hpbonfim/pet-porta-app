@@ -41,17 +41,18 @@ function connectar (){
       if(!error){
         resolve()
       } else {
-        reject('Aconteceu um erro')
         process.exit()
+        reject('Aconteceu um erro, verifique o arduíno')
       }
     }, 5000)
   })
 }
-connectar().then(console.log('OK')).catch(err => console.log("ERRO DO CARALHO::::",err))
+connectar().then(console.log('OK')).catch(err => console.log("ERRO DO CARALHO::::", err))
 
 //---------------------------------------------//
 function arduino() { 
   return new Promise((resolve, reject) => {
+    try{
       board.on('ready',() => {
         let relay = new five.Relay({ pin: 10, type: "NC" })
         relay.off()
@@ -66,47 +67,18 @@ function arduino() {
           resolve()
           next()
         })
-        console.log('ok')
-              
-        // app.use('/piscar', (req, res) => {
-        //   rgb.color(255,0,0)
-        //   board.wait(1000, ()=>{
-        //     rgb.color('green')
-        //     board.wait(1000, ()=>{
-        //       rgb.color('#0000ff')
-        //     })
-        //   })   
-        //     setTimeout(() => {rgb.off(), resolve(), res.sendStatus(200)}, 3000)
-        // })
-          
-//--------------------------------------------- Button config
-/*          touch.on("press", function() {
-            relay.on()
-            setTimeout(() => { relay.off() }, 500)
-            var time = new Date()
-            console.log("Botão Pressionado!", time)
-          })
-            
-          touch.on("release", function() {
-              relay.off()
-            console.log("Botão Solto!")
-          })
-          
-          touch.on("hold", function() {
-            relay.off()
-            console.log("Segurando...")
-          })
-*/
-      //---------------------------------------------
+        console.log('Arduino pronto!')
       })
-      if(!error){
-        resolve()
-      } else {
-        reject('Aconteceu um erro')
-      }
+    } catch(error){
+      reject('Aconteceu um erro')
+      process.exit()
+    }
+    if(!error){
+      resolve()
+    } 
   })
 }
-arduino().then('OK').catch(err => console.log("ERRO DO CARALHO::::",err))
+arduino().then('OK').catch(err => console.log("ERRO DO CARALHO::::", err))
 
 
 //---------------------------------------------//

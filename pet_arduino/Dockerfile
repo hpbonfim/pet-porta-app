@@ -1,5 +1,5 @@
 #Dockerfile
-FROM node:8.12.0
+FROM node:carbon
 ENV NODE_ENV=production
 # copy package.json to a temporary folder
 ADD package.json /tmp/package.json
