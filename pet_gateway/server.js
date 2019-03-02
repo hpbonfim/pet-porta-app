@@ -7,11 +7,11 @@ const morgan = require("morgan")
 const cors = require("cors")
 const app = express()
 //http calls
-const db = require("./database.config.js")
+const database = require("./database.config.js")
 const mongoose = require("mongoose")
 const axios = require('axios')
 const http = require("http")
-const port = 3000
+const port = process.env.GATEWAY_PORT
 
 // app.use(cors()); // CORS middleware
 app.use(morgan("dev"))
@@ -24,7 +24,7 @@ app.use(bodyParser.json())
 mongoose.Promise = global.Promise
 
 mongoose
-  .connect(db.url, { useMongoClient: true })
+  .connect(database.url, { useMongoClient: true })
   .then(() => {
     console.log("conectado com sucesso")
   })
@@ -34,9 +34,8 @@ mongoose
   })
   
   app.use('/abrir', (next) => {
-    const url = 'http://172.20.0.7:3003/abrir'
+    const url = process.env.ARDUINO
     abrirPorta(url)
-    return res.send(200).next()
   })
   
   async function abrirPorta(url) {
@@ -46,7 +45,6 @@ mongoose
     } 
     catch(err) {
       console.log(err)
-      next(err)
     }
   }
   
@@ -66,15 +64,12 @@ app.use((req, res, next) => {
 // Routes to handle requests
 app.use("/user", userRoutes)
 
-
-
 app.use((req, res, next) => {
   const error = new Error("Not found")
   error.status = 404
   console.log(error)
   next(error)
 })
-
 
 app.use((error, req, res, next) => {
   res.status(error.status || 500)
@@ -86,10 +81,7 @@ app.use((error, req, res, next) => {
   })
 })
 
-
 const server = http.createServer(app)
-
-
 
 server.listen(port, () => {
 console.log("pet_gateway server: ", port)

@@ -4,7 +4,7 @@
   "author": "Henrique P Bonfim",
   "private": true,
   "scripts": {
-    "start-docker": "nodemon server.js",
+    "start": "nodemon server.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },

@@ -1,5 +1,9 @@
 {
     "env": {
-        "JWT_KEY": "pet-secret"
+        "JWT_KEY": "pet-secret",
+        "PORTA_PORT": 3003,
+        "REGISTER":"http://172.12.0.5:3000/user/register",
+        "LOGIN":"http://172.12.0.5:3000/user/login",
+        "AUTH":"http://172.12.0.5:3000/abrir"
     }
 }

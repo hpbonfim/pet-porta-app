@@ -12,79 +12,87 @@ services:
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     - portainerdata:/data
-
-  # teste com novo banco de dados
+ 
+  nginx-amplify:
+    build: "./docker-nginx-amplify/"
+    container_name: nginx-board
+    restart: always
+    networks: 
+      - backend
+ 
+  # microserviço para banco de dados
   mongo:
     image: mongo:latest
     container_name: mongo
     restart: always
     command: --smallfiles
     volumes:
-    - pet:/data
+    - pet-database:/data
+    #enviromnets:
+    #  MONGO_INITDB_ROOT_USERNAME: ${DB_GUY}
+    #  MONGO_INITDB_ROOT_PASSWORD: ${DB_SUPERKEY}
     networks:
     - backend
-
+  # mongo-express para controle do pet-database
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-board
     restart: always
     ports:
-    - "8081:8080"
+    - ${DB_PORT}
     networks:
     - backend
     environment:
-      ME_CONFIG_BASICAUTH_USERNAME: dev
-      ME_CONFIG_BASICAUTH_PASSWORD: pass
+      ME_CONFIG_BASICAUTH_USERNAME: ${DB_ADMIN}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${DB_KEY}
     depends_on:
     - mongo
-
-  # microserviço que oferece o front-end e solicita/envia requisições/respostas ao cliente
+  # microserviço que fornece o front-end
   pet_porta:
     build: "./pet_porta/"
     container_name: pet_porta
+    #image: hpbonfim/pet_porta:latest
     restart: always
     ports:
-      - "3020:3000"
+      - ${NET_PORT_PORTA}
     networks:
-      frontend:
+      frontend: 
+        ipv4_address: ${NET_IP_EXPOSE}
       backend:
-        ipv4_address: 172.20.0.20
-        ipv6_address: 2001:3984:3989::20
-    entrypoint:
-      - /usr/local/bin/docker-entrypoint.sh
-    depends_on:
-      - pet_gateway
-
+        ipv4_address: ${NET_IP_PORTA}
+    #depends_on:
+    #  - pet_gateway
   # microserviço para tratar todas as requisiçoes
   pet_gateway:
     build: "./pet_gateway/"
     container_name: pet_gateway
+    #image: hpbonfim/pet_gateway:latest
     restart: always
     networks:
       backend:
-        ipv4_address: 172.20.0.5
-        ipv6_address: 2001:3984:3989::5
+        ipv4_address: ${NET_IP_GATEWAY}
     ports:
-      - "3000:3000"
+      - ${NET_PORT_GATEWAY}
+    entrypoint:
+    - '/usr/local/bin/docker-entrypoint.sh'
     depends_on:
       - mongo
       - mongo-express
-
   # microserviço para ativar o arduino
-  pet_arduino:
-    build: "./pet_arduino/"
-    container_name: pet_arduino
-    ports:
-    - "3003:3000"
-    privileged: true
-    devices:
-    - /dev:/dev
-    entrypoint:
-    - /usr/local/bin/docker-entrypoint.sh
-    networks:
-      backend:
-        ipv4_address: 172.20.0.7
-        ipv6_address: 2001:3984:3989::7
+  # pet_arduino:
+  #   build: "./pet_arduino/"
+  #   container_name: pet_arduino
+  #   #image: hpbonfim/pet_arduino:latest
+  #   ports:
+  #     - ${NET_PORT_ARDUINO}
+  #   privileged: true
+  #   devices:
+  #   - /dev:/dev
+  #   entrypoint:
+  #   - "/usr/local/bin/docker-entrypoint.sh"
+  #   networks:
+  #     backend:
+  #       ipv4_address: ${NET_IP_ARDUINO}
 
 networks:
   backend:
@@ -92,11 +100,15 @@ networks:
     ipam:
       driver: default
       config:
-      - subnet: 172.20.0.0/24
-      - subnet: 2001:3984:3989::/64
+      - subnet: ${SUBNET}
+
   frontend:
-    external: true
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: ${SUBNET_EXPOSED}
     
 volumes:
   portainerdata:
-  pet:
+  pet-database:

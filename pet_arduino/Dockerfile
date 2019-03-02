@@ -10,6 +10,7 @@ RUN cd /tmp && npm install --only=production && \
 RUN mkdir -p /usr/src/pet_arduino && cp -a /tmp/node_modules /usr/src/pet_arduino
 # "layer" thats been cached will be used if possible
 WORKDIR /usr/src/pet_arduino
+ADD nodemon.json /usr/src/pet_arduino
 # create a worker folder and add all files to mainwork
 ADD . /usr/src/pet_arduino
 # Entrypoint script

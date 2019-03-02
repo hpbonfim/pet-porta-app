@@ -10,7 +10,7 @@
                                 </v-img>
                             </v-list-tile-avatar>
                             <v-list-tile-content>
-                                <v-list-tile-title>Developer</v-list-tile-title>
+                                <v-list-tile-title>Nome: 1</v-list-tile-title>
                             </v-list-tile-content>
                             <v-menu bottom>
                                 <v-btn slot="activator" icon>
@@ -20,22 +20,13 @@
                         </v-list-tile>
                     </v-card-actions>
                     <v-list two-line>
-                        <v-list-tile @click="''">
-                            <v-list-tile-action>
-                                <v-icon color="indigo">fas fa-phone</v-icon>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>(67) 5555-1234</v-list-tile-title>
-                                <v-list-tile-sub-title>Celular</v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
                         <v-divider inset></v-divider>
                         <v-list-tile @click="''">
                             <v-list-tile-action>
-                                <v-icon color="indigo">fas fa-envelope</v-icon>
+                                <v-icon color="indigo">email</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                                <v-list-tile-title>aliconnors@example.com</v-list-tile-title>
+                                <v-list-tile-title>Email: 1@1.com</v-list-tile-title>
                                 <v-list-tile-sub-title>e-mail</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
@@ -44,10 +35,6 @@
                             <v-list-tile-action>
                                 <v-icon color="indigo">fas fa-map-pin</v-icon>
                             </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>1400 Main Street</v-list-tile-title>
-                                <v-list-tile-sub-title>Orlando, FL 79938</v-list-tile-sub-title>
-                            </v-list-tile-content>
                         </v-list-tile>
                     </v-list>
                 </v-card>

@@ -2,15 +2,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
-import { decode } from 'punycode';
-const fs = require('fs')
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // GLOBAL states
-    //,
     status: '',
     // USER states //localStorage.getItem('token') || ''
     token: localStorage.getItem('token'),
@@ -48,10 +44,9 @@ export default new Vuex.Store({
     auth_success (state, token) {
       state.status = 'success'
       state.token = token
-      //state.user = user
     },
     auth_error (state) {
-      //state.user = null
+      state.user = null
       state.token = null
       state.status = 'error'
     },
@@ -64,7 +59,7 @@ export default new Vuex.Store({
     // Arduino Actions
     openDoor ({ commit }) {
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:3000/abrir')
+        axios.get(process.env.AUTH)
           .then((response) => {
             // handle success
             commit('is_open')
@@ -109,34 +104,28 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         commit('auth_request')
         axios({
-          url: 'http://localhost:3000/user/login',
+          url: "http://172.12.0.5:3000/user/login",
           data: user,
           method: 'POST'
         })
-          .then(resp => {
-            let token = resp.data.token
-            axios.defaults.headers.common['Authorization'] = token
-              jwt.verify(token, 'pet-secret', function(err, decoded) {
-                if (err) {
-                console.log(err)
-                }
-                localStorage.setItem('token', decoded)
-                localStorage.setItem('token', token)
-                commit('auth_success', token)
-                resolve(resp)
-              })
-            })
-            .catch(err => {
-              commit('auth_error')
-              localStorage.removeItem('token')
-              reject(err)
-          })
+        .then(resp => {
+          let token = resp.data
+          localStorage.setItem('token', token)
+          axios.defaults.headers.common['Authorization'] = token
+          commit('auth_success', token)
+          resolve(resp)
+        })
+        .catch(err => {
+          commit('auth_error')
+          localStorage.removeItem('token')
+          reject(err)
+        })
       })
     },
     register ({ commit }, user) {
       return new Promise((resolve, reject) => {
         axios({
-          url: 'http://localhost:3000/user/register',
+          url: 'http://172.12.0.5:3000/user/register',
           data: user,
           method: 'POST'
         })

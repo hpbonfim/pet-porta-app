@@ -1,0 +1,6 @@
+{
+    "env": {
+        "JWT_KEY": "pet-secret",
+        "ARDUINO_PORT": 3003
+    }
+}

@@ -13,7 +13,6 @@ WORKDIR /usr/src/pet_database
 # copy package.json to a temporary folder
 ADD . /usr/src/pet_database
 ADD nodemon.json /usr/src/pet_database
-ADD docker-entrypoint.sh /usr/src/pet_database
 # installing the node_modules 
 RUN npm install && \
     npm cache clean --force
