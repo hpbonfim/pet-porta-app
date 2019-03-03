@@ -13,12 +13,12 @@ services:
     - /var/run/docker.sock:/var/run/docker.sock
     - portainerdata:/data
  
-  nginx-amplify:
-    build: "./docker-nginx-amplify/"
-    container_name: nginx-board
-    restart: always
-    networks: 
-      - backend
+  # nginx-amplify:
+  #   build: "./docker-nginx-amplify/"
+  #   container_name: nginx-board
+  #   restart: always
+  #   networks: 
+  #     - backend
  
   # microserviço para banco de dados
   mongo:
@@ -79,20 +79,20 @@ services:
       - mongo
       - mongo-express
   # microserviço para ativar o arduino
-  # pet_arduino:
-  #   build: "./pet_arduino/"
-  #   container_name: pet_arduino
-  #   #image: hpbonfim/pet_arduino:latest
-  #   ports:
-  #     - ${NET_PORT_ARDUINO}
-  #   privileged: true
-  #   devices:
-  #   - /dev:/dev
-  #   entrypoint:
-  #   - "/usr/local/bin/docker-entrypoint.sh"
-  #   networks:
-  #     backend:
-  #       ipv4_address: ${NET_IP_ARDUINO}
+  pet_arduino:
+    build: "./pet_arduino/"
+    container_name: pet_arduino
+    #image: hpbonfim/pet_arduino:latest
+    ports:
+      - ${NET_PORT_ARDUINO}
+    privileged: true
+    devices:
+    - /dev:/dev
+    entrypoint:
+    - "/usr/local/bin/docker-entrypoint.sh"
+    networks:
+      backend:
+        ipv4_address: ${NET_IP_ARDUINO}
 
 networks:
   backend:

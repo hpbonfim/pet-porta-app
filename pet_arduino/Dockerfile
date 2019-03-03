@@ -1,5 +1,5 @@
 #Dockerfile
-FROM node:carbon
+FROM node:8.15.1-stretch-slim
 ENV NODE_ENV=production
 # copy package.json to a temporary folder
 ADD package.json /tmp/package.json
