@@ -13,7 +13,7 @@
               </div>
         </v-layout>
       </v-card-title>
-      <v-timeline dense clipped>
+      <!--v-timeline dense clipped>
         <v-slide-x-transition group>
           <v-timeline-item v-for="event in timeline" :key="event.id" class="mb-3" color="green" small>
             <v-layout justify-space-between>
@@ -22,7 +22,7 @@
             </v-layout>
           </v-timeline-item>
         </v-slide-x-transition>
-      </v-timeline>
+      </v-timeline-->
   </v-container>
 </template>
 

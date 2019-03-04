@@ -4,14 +4,16 @@
             <v-container fluid>
                 <v-layout column align-center>
                     <v-card>
+                      <v-responsive>
                         <div class="main">
-                            <v-alert v-if="isWrongActivity" :value="errorMessage" type="error" :center="true" dismissible>{{errorMessage}}</v-alert>
-                            <h1>Atividades</h1>
-                            <div v-if="isEmpty">
-                                <el-alert title="Nenhuma atividade na lista" type="info" :center="true" show-icon :closable="false"></el-alert>
-                            </div>
-                            <div v-else>
-                                <v-responsive>
+                          <v-container>
+                            <v-responsive>
+                              <v-alert v-if="isWrongActivity" :value="errorMessage" type="error" :center="true" dismissible>{{errorMessage}}</v-alert>
+                              <h1>Atividades</h1>
+                              <div v-if="isEmpty">
+                                  <el-alert title="Nenhuma atividade na lista" type="info" :center="true" show-icon :closable="false"></el-alert>
+                              </div>
+                              <div v-else>
                                 <el-table :data="activities" :row-class-name="tableRowColor">
                                         <el-table-column prop="name" label="Name">
                                     </el-table-column>
@@ -32,9 +34,11 @@
                                         </template>
                                     </el-table-column>
                                 </el-table>
-                                </v-responsive>
-                            </div>
+                              </div>
+                            </v-responsive>
+                          </v-container>
                         </div>
+                      <v-responsive>
                         <v-card-actions type="flex" justify="center" class="counterSection">
                             <v-card-text :span="4"> Completo: {{completed}}</v-card-text>
                             <v-card-text :span="3"> Total : {{total}}</v-card-text>
