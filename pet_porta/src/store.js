@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
-import jwt from 'jsonwebtoken'
+const axios = require('axios')
+const jwt =('jsonwebtoken')
+const config = require('./config')
 
 Vue.use(Vuex)
 
@@ -10,7 +11,8 @@ export default new Vuex.Store({
     status: '',
     // USER states //localStorage.getItem('token') || ''
     token: localStorage.getItem('token'),
-    //user: {},
+    logado: false,
+    usuario: {},
     // TODO states
     activities: []
   },
@@ -104,16 +106,19 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         commit('auth_request')
         axios({
-          url: "http://172.12.0.5:3000/user/login",
+          url: config.LOGIN,
           data: user,
           method: 'POST'
         })
         .then(resp => {
-          let token = resp.data
-          localStorage.setItem('token', token)
-          axios.defaults.headers.common['Authorization'] = token
-          commit('auth_success', token)
-          resolve(resp)
+          console.log(resp.data)
+          this.usuario = resp.data
+            // se tudo estiver ok, salva no request para uso posterior
+          axios.defaults.headers.common['Authorization'] = resp.data.id
+          localStorage.setItem(resp.data.id) 
+          state.logado = true
+          commit('auth_success', resp.data)
+          resolve(resp.data)
         })
         .catch(err => {
           commit('auth_error')
@@ -125,7 +130,7 @@ export default new Vuex.Store({
     register ({ commit }, user) {
       return new Promise((resolve, reject) => {
         axios({
-          url: 'http://172.12.0.5:3000/user/register',
+          url: config.REGISTRAR,
           data: user,
           method: 'POST'
         })
@@ -154,7 +159,7 @@ export default new Vuex.Store({
       return state.activities
     },
     // USER getters
-    isLoggedIn: state => !!state.token,
+    isLoggedIn: state => !!state.logado,
     authStatus: state => state.status
   }
 })

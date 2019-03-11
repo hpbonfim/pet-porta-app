@@ -1,11 +1,14 @@
 //routes
 const userRoutes = require("./api/routes/user")
+const arduinoRoutes = require("./api/routes/arduino")
+
 // Configuring the database
 const bodyParser = require("body-parser")
 const express = require("express")
 const morgan = require("morgan")
 const cors = require("cors")
 const app = express()
+
 //http calls
 const database = require("./database.config.js")
 const mongoose = require("mongoose")
@@ -33,21 +36,7 @@ mongoose
     process.exit()
   })
   
-  app.use('/abrir', (next) => {
-    const url = process.env.ARDUINO
-    abrirPorta(url)
-  })
-  
-  async function abrirPorta(url) {
-    try{
-      const res = await axios.get(url)
-      console.log(res)
-    } 
-    catch(err) {
-      console.log(err)
-    }
-  }
-  
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
   res.header(
@@ -62,6 +51,7 @@ app.use((req, res, next) => {
 })
 
 // Routes to handle requests
+app.use("/abrir", arduinoRoutes)
 app.use("/user", userRoutes)
 
 app.use((req, res, next) => {
