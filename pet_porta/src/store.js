@@ -115,8 +115,8 @@ export default new Vuex.Store({
           this.usuario = resp.data
             // se tudo estiver ok, salva no request para uso posterior
           axios.defaults.headers.common['Authorization'] = resp.data.id
-          localStorage.setItem(resp.data.id) 
-          state.logado = true
+          localStorage.setItem('token', resp.data.id) 
+          this.logado = true
           commit('auth_success', resp.data)
           resolve(resp.data)
         })
@@ -159,7 +159,7 @@ export default new Vuex.Store({
       return state.activities
     },
     // USER getters
-    isLoggedIn: state => !!state.logado,
+    isLoggedIn: state => !!state.token,
     authStatus: state => state.status
   }
 })

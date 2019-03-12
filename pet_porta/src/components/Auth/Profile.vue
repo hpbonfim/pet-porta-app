@@ -48,9 +48,16 @@
 export default {
   data () {
     return {
+        usuario: {}
     }
   },
   computed: {
+    user () {
+        this.usuario = this.$store.state.user
+        console.log(this.$store.state.user)
+        console.log(usuario)
+        console.log(this.usuario)
+    },
     loggedIn () {
       return this.$store.getters.loggedIn
     }
