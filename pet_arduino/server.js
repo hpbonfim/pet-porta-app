@@ -2,47 +2,50 @@
 const bodyParser = require('body-parser')
 const port = process.env.ARDUINO_PORT
 const express = require('express')
+const helmet = require('helmet')
 const cors = require('cors')
 const app = express()
-const http = require('http')
-const five = require("johnny-five")
-const server = http.createServer(app)
-const EtherPort = require("etherport")
-
+var five = require('johnny-five')
+var cfg = { pin: 8, type: 'NC' }
+// var board = new five.Board({repl: false /*port: new EtherPort(3030)*/})
+//console.log(five.Board({repl: false}).on('ready', function() {}))
+var board = five.Board({
+    repl: false,
+    port: "/dev/ttyACM0"
+//port: new EtherPort(3030),
+})
 //---------------------------------------------//
 app.use(cors()) // simple CORS Middleware
+app.use(helmet())
 app.use(bodyParser.urlencoded({ extended: true })) // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.json()) // parse requests of content-type - application/json
 
-//------------------------------------------ Arduino Modules
-function ligar () {
-  return new Promise((err, resolve, reject) => {
-    setTimeout(() => {  
-      let board = new five.Board({repl: false /*port: new EtherPort(3030)*/})
-      board.on('ready',() => {
-        let relay = new five.Relay({ pin: 6, type: "NC" })
-        relay.off()
-        app.use('/abrir', (req, res, next) => {
-          relay.on()
-          setTimeout(() => { relay.off() }, 1000)
-          res.sendStatus(200)
-          resolve()
-        })
-      })
-    }, 5000)
+// Routes to handle requests
+board.on("error", function(msg) {
+    console.log("On Error: ", msg)
+  //  process.exit(15)
+  app.use('/abrir', (req, res, next) => {
+    res.json(msg)
+    next()
   })
-}
+})
 
-Promise.all([
-  ligar()
-])
-.then(() => console.log("OK"))
-.catch((err) => console.log(err))
+board.on("ready", function() {
+  app.use('/abrir', (req, res, next) => {
+    let time = (new Date()).toJSON()
+    console.log("ready")
+    let relay = new five.Relay({ cfg })
+    relay.off()
+    setTimeout(() => { relay.on() }, 1500)
+    relay.off()
+    console.log("aberto em: ",time)
+    res.json(time)
+    next()
+  })
+})
 
 
-//---------------------------------------------//
-server.listen(port, function() {
-console.log("Arduino port: ",port)
+app.listen(port, function() {
+  console.log("Arduino port: ",port)
 })
 //---------------------------------------------//
-

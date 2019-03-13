@@ -61,7 +61,7 @@ export default new Vuex.Store({
     // Arduino Actions
     openDoor ({ commit }) {
       return new Promise((resolve, reject) => {
-        axios.get(process.env.AUTH)
+        axios.get(config.AUTH)
           .then((response) => {
             // handle success
             commit('is_open')
@@ -117,7 +117,7 @@ export default new Vuex.Store({
           axios.defaults.headers.common['Authorization'] = resp.data.id
           localStorage.setItem('token', resp.data.id) 
           this.logado = true
-          commit('auth_success', resp.data)
+          commit('auth_success', resp.data.id)
           resolve(resp.data)
         })
         .catch(err => {

@@ -13,6 +13,8 @@ RUN mkdir -p /var/www/html
 # Copy the respective nginx configuration files
 COPY nginx_config/nginx.conf /etc/nginx/nginx.conf
 COPY nginx_config/default.conf /etc/nginx/conf.d/default.conf
+#COPY nginx_config/server.crt /etc/nginx/ssl/server.crt
+#COPY nginx_config/server.key /etc/nginx/ssl/server.key
 
 # Set the directory we want to run the next commands for
 WORKDIR /tmp/nginx/pet_porta

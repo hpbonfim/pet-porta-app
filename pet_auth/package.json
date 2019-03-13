@@ -1,0 +1,30 @@
+{
+  "name": "pet-auth",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --no-deprecation src/index.js",
+    "test": "lab --verbose --assert code --coverage",
+    "db:seed": "node src/utils/seed.js"
+  },
+  "author": "Henrique",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "3.0.0",
+    "bluebird": "^3.5.3",
+    "boom": "^7.2.0",
+    "dotenv": "^6.1.0",
+    "glue": "^5.0.0",
+    "hapi": "^17.5.4",
+    "hapi-auth-jwt2": "^8.1.0",
+    "jsonwebtoken": "^8.4.0",
+    "lodash": "^4.17.11",
+    "mailgun-js": "^0.22.0",
+    "mongoose": "^5.3.12",
+    "nodemon": "^1.18.10"
+  },
+  "devDependencies": {
+    "code": "^5.2.0",
+    "lab": "^16.1.0"
+  }
+}

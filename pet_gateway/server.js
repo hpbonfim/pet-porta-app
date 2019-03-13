@@ -1,6 +1,5 @@
 //routes
 const userRoutes = require("./api/routes/user")
-const arduinoRoutes = require("./api/routes/arduino")
 
 // Configuring the database
 const bodyParser = require("body-parser")
@@ -36,6 +35,23 @@ mongoose
     process.exit()
   })
   
+  app.use('/abrir', () => {
+    const url = 'http://172.20.0.7:3004/abrir'
+    abrirPorta(url)
+    let time = (new Date()).toJSON()
+    console.log(time)
+  })
+  
+  async function abrirPorta(url) {
+    try{
+      const res = await axios.get(url)
+      console.log(res)
+    } 
+    catch(err) {
+      console.log(err)
+      next(err)
+    }
+  }
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
@@ -50,8 +66,6 @@ app.use((req, res, next) => {
   next()
 })
 
-// Routes to handle requests
-app.use("/abrir", arduinoRoutes)
 app.use("/user", userRoutes)
 
 app.use((req, res, next) => {

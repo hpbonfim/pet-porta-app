@@ -13,13 +13,6 @@ services:
     - /var/run/docker.sock:/var/run/docker.sock
     - portainerdata:/data
  
-  # nginx-amplify:
-  #   build: "./docker-nginx-amplify/"
-  #   container_name: nginx-board
-  #   restart: always
-  #   networks: 
-  #     - backend
- 
   # microserviço para banco de dados
   mongo:
     image: mongo:latest
@@ -33,6 +26,7 @@ services:
     #  MONGO_INITDB_ROOT_PASSWORD: ${DB_SUPERKEY}
     networks:
     - backend
+
   # mongo-express para controle do pet-database
   mongo-express:
     image: mongo-express:latest
@@ -47,6 +41,24 @@ services:
       ME_CONFIG_BASICAUTH_PASSWORD: ${DB_KEY}
     depends_on:
     - mongo
+
+  # microserviço para tratar todas as requisiçoes
+  pet_auth:
+    build: "./pet_auth/"
+    container_name: pet_auth
+    #image: hpbonfim/pet_auth:latest
+    restart: always
+    networks:
+      backend:
+        ipv4_address: ${NET_IP_AUTH}
+    ports:
+      - ${NET_PORT_AUTH}
+    entrypoint:
+    - '/usr/local/bin/docker-entrypoint.sh'
+    depends_on:
+      - mongo
+      - mongo-express
+
   # microserviço que fornece o front-end
   pet_porta:
     build: "./pet_porta/"
@@ -62,6 +74,7 @@ services:
         ipv4_address: ${NET_IP_PORTA}
     #depends_on:
     #  - pet_gateway
+
   # microserviço para tratar todas as requisiçoes
   pet_gateway:
     build: "./pet_gateway/"
@@ -78,6 +91,7 @@ services:
     depends_on:
       - mongo
       - mongo-express
+      
   # microserviço para ativar o arduino
   pet_arduino:
     build: "./pet_arduino/"

@@ -38,7 +38,7 @@
                             </v-responsive>
                           </v-container>
                         </div>
-                      <v-responsive>
+                      </v-responsive>
                         <v-card-actions type="flex" justify="center" class="counterSection">
                             <v-card-text :span="4"> Completo: {{completed}}</v-card-text>
                             <v-card-text :span="3"> Total : {{total}}</v-card-text>

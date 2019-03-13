@@ -2,7 +2,7 @@
   "name": "pet-arduino",
   "version": "0.1.0",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon --no-deprecation server.js"
   },
   "keywords": [],
   "author": "Henrique Paulo Bonfim",
@@ -12,9 +12,10 @@
     "cors": "^2.8.5",
     "etherport": "^0.2.0",
     "express": "^4.16.2",
-    "j5-songs": "0.0.9",
-    "serialport": "^7.1.4",
+    "helmet": "^3.16.0",
     "johnny-five": "^1.0.0",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "q": "^1.5.1",
+    "serialport": "^7.1.4"
   }
 }
