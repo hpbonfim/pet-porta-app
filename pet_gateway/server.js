@@ -37,22 +37,17 @@ mongoose
   
   app.use('/abrir', () => {
     const url = 'http://172.20.0.7:3004/abrir'
-    abrirPorta(url)
-    let time = (new Date()).toJSON()
-    console.log(time)
-  })
-  
-  async function abrirPorta(url) {
     try{
       const res = await axios.get(url)
+      let time = (new Date()).toJSON()
+      console.log(time)
       console.log(res)
     } 
     catch(err) {
       console.log(err)
-      next(err)
     }
-  }
-
+  })
+  
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
   res.header(

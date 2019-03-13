@@ -6,7 +6,6 @@ const helmet = require('helmet')
 const cors = require('cors')
 const app = express()
 var five = require('johnny-five')
-var cfg = { pin: 8, type: 'NC' }
 // var board = new five.Board({repl: false /*port: new EtherPort(3030)*/})
 //console.log(five.Board({repl: false}).on('ready', function() {}))
 var board = five.Board({
@@ -31,10 +30,10 @@ board.on("error", function(msg) {
 })
 
 board.on("ready", function() {
+  let relay = new five.Relay({ pin: 8, type: 'NC' })
   app.use('/abrir', (req, res, next) => {
     let time = (new Date()).toJSON()
     console.log("ready")
-    let relay = new five.Relay({ cfg })
     relay.off()
     setTimeout(() => { relay.on() }, 1500)
     relay.off()
