@@ -1,46 +1,51 @@
 <template>
-    <v-app>
-        <v-layout row>
-            <v-flex sm6 offset-sm3>
-                <v-card>
-                    <v-card-actions>
-                        <v-list-tile class="grow">
-                            <v-list-tile-avatar color="grey darken-3">
-                                <v-img class="elevation-6" src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light">
-                                </v-img>
-                            </v-list-tile-avatar>
-                            <v-list-tile-content>
-                                <v-list-tile-title>Nome: 1</v-list-tile-title>
-                            </v-list-tile-content>
-                            <v-menu bottom>
-                                <v-btn slot="activator" icon>
-                                    <v-icon class="mr-1">fas fa-bars</v-icon>
+    <v-app> 
+        <v-responsive>
+            <v-layout row align-center>
+                <v-content>
+                    <v-container fluid>
+                        <v-responsive>
+                            <img height="25" src="./../../assets/bemvindo.png">
+                            <br>
+                            <img height="50" src="./../../assets/logo.png">
+                            <br>
+                        </v-responsive>
+                        <v-card>
+                            <v-list two-line>
+                                <v-list-tile @click="">
+                                    <v-list-tile-avatar color="grey darken-3">
+                                         <v-img class="elevation-6" src='https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads02&accessoriesType=Round&hairColor=SilverGray&facialHairType=MoustacheMagnum&facialHairColor=Platinum&clotheType=BlazerSweater&eyeType=Surprised&eyebrowType=DefaultNatural&mouthType=Smile&skinColor=Light'></v-img>
+                                    </v-list-tile-avatar>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>Usuario:</v-list-tile-title>
+                                        <v-list-tile-sub-title>Nome:</v-list-tile-sub-title>
+                                        <v-list-tile-sub-title>E-mail:</v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            </v-list>
+                            <v-list-tile-action></v-list-tile-action>
+                            <v-list two-line>
+                                <v-divider></v-divider>
+                                <v-list-tile @click="''">
+                                    <v-list-tile-action>
+                                        <v-icon color="gray">class</v-icon>
+                                    </v-list-tile-action>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>Projetos Ativos::</v-list-tile-title>
+                                        <v-list-tile-sub-title>Projeto1: blablabla... </v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                                <v-divider></v-divider>
+                                 <v-btn dark color="red" @click="logout()">
+                                    <span>Sair </span>
+                                    <v-icon>exit_to_app</v-icon>
                                 </v-btn>
-                            </v-menu>
-                        </v-list-tile>
-                    </v-card-actions>
-                    <v-list two-line>
-                        <v-divider inset></v-divider>
-                        <v-list-tile @click="''">
-                            <v-list-tile-action>
-                                <v-icon color="indigo">email</v-icon>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>Email: 1@1.com</v-list-tile-title>
-                                <v-list-tile-sub-title>e-mail</v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-divider inset></v-divider>
-                        <v-list-tile @click="''">
-                            <v-list-tile-action>
-                                <v-icon color="indigo">fas fa-map-pin</v-icon>
-                            </v-list-tile-action>
-                        </v-list-tile>
-                    </v-list>
-                </v-card>
-            </v-flex>
-        </v-layout>
-    <router-view/>
+                            </v-list>
+                        </v-card>
+                    </v-container>
+                </v-content>
+            </v-layout>
+        </v-responsive>
     </v-app>
 </template>
 
@@ -49,6 +54,12 @@ export default {
   data () {
     return {
         usuario: {}
+    }
+  },
+  methods: {
+    logout () {
+      this.$store.dispatch('logout')
+      this.$router.push('/logar')
     }
   },
   computed: {

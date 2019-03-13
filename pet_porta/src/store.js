@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 const axios = require('axios')
-const jwt =('jsonwebtoken')
 const config = require('./config')
+var key
 
 Vue.use(Vuex)
 
@@ -10,7 +10,7 @@ export default new Vuex.Store({
   state: {
     status: '',
     // USER states //localStorage.getItem('token') || ''
-    token: localStorage.getItem('token'),
+    token: localStorage.getItem('token') || null,
     logado: false,
     usuario: {},
     // TODO states
@@ -113,8 +113,11 @@ export default new Vuex.Store({
         .then(resp => {
           console.log(resp.data)
           this.usuario = resp.data
+          console.log(this.usuario)
+          console.log(resp.data)
             // se tudo estiver ok, salva no request para uso posterior
           axios.defaults.headers.common['Authorization'] = resp.data.id
+          key = resp.data.id
           localStorage.setItem('token', resp.data.id) 
           this.logado = true
           commit('auth_success', resp.data.id)
