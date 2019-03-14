@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 const axios = require('axios')
 const config = require('./config')
-var key
 
 Vue.use(Vuex)
 
@@ -11,8 +10,8 @@ export default new Vuex.Store({
     status: '',
     // USER states //localStorage.getItem('token') || ''
     token: localStorage.getItem('token') || null,
+    usuario: [],
     logado: false,
-    usuario: {},
     // TODO states
     activities: []
   },
@@ -21,7 +20,6 @@ export default new Vuex.Store({
     is_open (state, token) {
       state.status = 'opening'
       state.token = token
-      //state.user = user
     },
     // TODO mutation
     addActivity (state, activity) {
@@ -46,6 +44,13 @@ export default new Vuex.Store({
     auth_success (state, token) {
       state.status = 'success'
       state.token = token
+    },
+    logar_usuario (state, payload) {
+      state.status = 'success'
+      state.usuario.id = payload.id
+      state.usuario.username = payload.username
+      state.usuario.name = payload.name
+      state.usuario.email = payload.email
     },
     auth_error (state) {
       state.user = null
@@ -111,15 +116,9 @@ export default new Vuex.Store({
           method: 'POST'
         })
         .then(resp => {
-          console.log(resp.data)
-          this.usuario = resp.data
-          console.log(this.usuario)
-          console.log(resp.data)
-            // se tudo estiver ok, salva no request para uso posterior
+          commit('logar_usuario',{id: resp.data.id, username: resp.data.username, name: resp.data.name, email: resp.data.email})
           axios.defaults.headers.common['Authorization'] = resp.data.id
-          key = resp.data.id
           localStorage.setItem('token', resp.data.id) 
-          this.logado = true
           commit('auth_success', resp.data.id)
           resolve(resp.data)
         })
@@ -162,6 +161,16 @@ export default new Vuex.Store({
       return state.activities
     },
     // USER getters
+    getUsuario: state => {
+      var user = state.usuario.map( info => {
+        return{
+          username: info.username,
+          name: info.name,
+          email: info.email
+        }
+      })
+      return user
+    },
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status
   }

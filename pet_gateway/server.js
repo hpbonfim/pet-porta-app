@@ -35,17 +35,17 @@ mongoose
     process.exit()
   })
   
-  app.use('/abrir', () => {
-    const url = 'http://172.20.0.7:3004/abrir'
-    try{
-      const res = await axios.get(url)
-      let time = (new Date()).toJSON()
-      console.log(time)
-      console.log(res)
-    } 
-    catch(err) {
-      console.log(err)
-    }
+  app.use('/abrir', (req, res, next) => {
+      const url = 'http://172.12.0.6:3004/abrir'
+      try{
+        axios.get(url)
+        let time = (new Date()).toJSON()
+        console.log(time)
+        next()
+      } 
+      catch(err) {
+        console.log(err)
+      }
   })
   
 app.use((req, res, next) => {

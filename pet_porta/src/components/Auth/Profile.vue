@@ -16,10 +16,10 @@
                                     <v-list-tile-avatar color="grey darken-3">
                                          <v-img class="elevation-6" src='https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads02&accessoriesType=Round&hairColor=SilverGray&facialHairType=MoustacheMagnum&facialHairColor=Platinum&clotheType=BlazerSweater&eyeType=Surprised&eyebrowType=DefaultNatural&mouthType=Smile&skinColor=Light'></v-img>
                                     </v-list-tile-avatar>
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>Usuario:</v-list-tile-title>
-                                        <v-list-tile-sub-title>Nome:</v-list-tile-sub-title>
-                                        <v-list-tile-sub-title>E-mail:</v-list-tile-sub-title>
+                                    <v-list-tile-content v-for="user in getUsuario" v-bind:key="user">>
+                                        <v-list-tile-title><div>Usuario:{{user.username}}</div></v-list-tile-title>
+                                        <v-list-tile-sub-title><div>Nome:{{user.name}}</div></v-list-tile-sub-title>
+                                        <v-list-tile-sub-title><div>E-mail:{{user.email}}</div></v-list-tile-sub-title>
                                     </v-list-tile-content>
                                 </v-list-tile>
                             </v-list>
@@ -31,7 +31,7 @@
                                         <v-icon color="gray">class</v-icon>
                                     </v-list-tile-action>
                                     <v-list-tile-content>
-                                        <v-list-tile-title>Projetos Ativos::</v-list-tile-title>
+                                        <v-list-tile-title>Projetos Ativos:</v-list-tile-title>
                                         <v-list-tile-sub-title>Projeto1: blablabla... </v-list-tile-sub-title>
                                     </v-list-tile-content>
                                 </v-list-tile>
@@ -51,46 +51,48 @@
 
 <script>
 export default {
-  data () {
-    return {
-        usuario: {}
-    }
-  },
-  methods: {
-    logout () {
-      this.$store.dispatch('logout')
-      this.$router.push('/logar')
-    }
-  },
-  computed: {
-    user () {
-        this.usuario = this.$store.state.user
-        console.log(this.$store.state.user)
-        console.log(usuario)
-        console.log(this.usuario)
+    data () {
+        return {
+        }
     },
-    loggedIn () {
-      return this.$store.getters.loggedIn
-    }
-  }
+    methods: {
+        foo(){
+            console.log(this.getUsuario())
+        }
+    },
+    computed: {
+        getUsuario(){
+            return this.$store.getters.getUsuario
+        },
+        loggedIn () {
+            return this.$store.getters.isLoggedIn
+        }
+    },
+    methods: {
+        logout () {
+            this.$store.dispatch('logout')
+            this.$router.push('/logar')
+        }
+    },
 }
 </script>
+
 <style>
 #app {
-font-family: 'Avenir', Helvetica, Arial, sans-serif;
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
-text-align: center;
-color: #2c3e50;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
 }
 #nav {
-padding: 30px;
+    padding: 30px;
 }
 #nav a {
-font-weight: bold;
-color: #1c647e;
+    font-weight: bold;
+    color: #1c647e;
 }
 #nav a.router-link-exact-active {
-color: #1c647e;
+    color: #1c647e;
 }
 </style>
