@@ -17,9 +17,9 @@
                                          <v-img class="elevation-6" src='https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads02&accessoriesType=Round&hairColor=SilverGray&facialHairType=MoustacheMagnum&facialHairColor=Platinum&clotheType=BlazerSweater&eyeType=Surprised&eyebrowType=DefaultNatural&mouthType=Smile&skinColor=Light'></v-img>
                                     </v-list-tile-avatar>
                                     <v-list-tile-content>
-                                        <v-list-tile-title><div>Usuario: hpbonfim</div></v-list-tile-title>
-                                        <v-list-tile-sub-title><div>Nome: henrique paulo</div></v-list-tile-sub-title>
-                                        <v-list-tile-sub-title><div>E-mail: hp_bonfim@hotmail.com</div></v-list-tile-sub-title>
+                                        <v-list-tile-title><div>Usuario:{{this.$store.state.usuario.username}}</div></v-list-tile-title>
+                                        <v-list-tile-sub-title><div>Nome:{{this.$store.state.usuario.name}}</div></v-list-tile-sub-title>
+                                        <v-list-tile-sub-title><div>E-mail:{{this.$store.state.usuario.email}}</div></v-list-tile-sub-title>
                                     </v-list-tile-content>
                                 </v-list-tile>
                             </v-list>
@@ -56,17 +56,8 @@ export default {
         }
     },
     methods: {
-        foo(){
-            console.log(this.getUsuario())
-        }
     },
     computed: {
-        getUsuario(){
-            return this.$store.getters.getUsuario
-        },
-        loggedIn () {
-            return this.$store.getters.isLoggedIn
-        }
     },
     methods: {
         logout () {
