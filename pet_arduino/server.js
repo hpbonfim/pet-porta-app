@@ -36,9 +36,7 @@ board.on("ready", function() {
     relay.on() 
     setTimeout(() => {  
       relay.off()
-      let time = (new Date()).toJSON()
-      console.log("aberto em: ",time)
-      res.json(time)
+      res.sendStatus(200)
       next()
     }, 500)
   })

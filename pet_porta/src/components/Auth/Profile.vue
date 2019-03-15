@@ -16,10 +16,10 @@
                                     <v-list-tile-avatar color="grey darken-3">
                                          <v-img class="elevation-6" src='https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads02&accessoriesType=Round&hairColor=SilverGray&facialHairType=MoustacheMagnum&facialHairColor=Platinum&clotheType=BlazerSweater&eyeType=Surprised&eyebrowType=DefaultNatural&mouthType=Smile&skinColor=Light'></v-img>
                                     </v-list-tile-avatar>
-                                    <v-list-tile-content v-for="user in getUsuario" v-bind:key="user">>
-                                        <v-list-tile-title><div>Usuario:{{user.username}}</div></v-list-tile-title>
-                                        <v-list-tile-sub-title><div>Nome:{{user.name}}</div></v-list-tile-sub-title>
-                                        <v-list-tile-sub-title><div>E-mail:{{user.email}}</div></v-list-tile-sub-title>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title><div>Usuario: hpbonfim</div></v-list-tile-title>
+                                        <v-list-tile-sub-title><div>Nome: henrique paulo</div></v-list-tile-sub-title>
+                                        <v-list-tile-sub-title><div>E-mail: hp_bonfim@hotmail.com</div></v-list-tile-sub-title>
                                     </v-list-tile-content>
                                 </v-list-tile>
                             </v-list>
