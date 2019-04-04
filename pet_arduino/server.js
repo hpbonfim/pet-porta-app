@@ -38,7 +38,7 @@ board.on("ready", function() {
       relay.off()
       res.sendStatus(200)
       next()
-    }, 500)
+    }, 700)
   })
   app.listen(port, function() {
     console.log("Arduino port: ",port)
