@@ -1,29 +1,31 @@
-# pet-porta-app
+# PET-PORTA-APP
 Projeto criado para o PET(Programa de Educacao Tutorial) - Ministério da Educação, para ativar um relay eletronico via PWA (Progressive Web App). Consiste em 5 microserviços suportados via Docker Compose.
 
 ```sh
  - PET_AUTH
  - PET_GATEWAY
  - PET_ARDUINO
- - PET_DATABASE.
+ - PET_DATABASE
  - PET_PORTA
 ```
 # Principais Ferramentas:
-* [VueJS] - Vue.js é uma estrutura JavaScript de código aberto para criar interfaces com o usuário e aplicativos de página única
 
 * [node.js] -  Node.js é um ambiente de tempo de execução JavaScript de plataforma aberta e código aberto que executa o código JavaScript fora de um navegador.
  
-* [Express] - Concebido para construir aplicações web e APIs. Ele foi chamado de estrutura de servidor padrão de fato para o Node.js
+* [Express] - Concebido para construir aplicações web e APIs. Ele foi chamado de estrutura de servidor padrão de fato para o Node.js.
 
-* [Docker] - Docker é um programa de computador que executa virtualização no nível do sistema operacional
+* [Docker] - Docker é um programa de computador que executa virtualização no nível do sistema operacional.
+
+* [VueJS] - Vue.js é uma estrutura do FrontEnd de código aberto para criar interfaces PWA.
 
 * [Nginx] - O Nginx é um servidor da Web que também pode ser usado como reverse proxy, load balancer, mail proxy and HTTP cache.
 
 ...
 
 
-### Instalação do Docker
-Por padrão, o Docker irá expor na porta 8080, portanto, altere isso no Dockerfile, se necessário. Quando estiver pronto, basta usar o Dockerfile para construir a imagem.
+### Instalação do Docker:
+Por padrão, o Portainer irá expor na porta 9000, portanto, altere isso no .env se necessário. 
+Quando estiver pronto, basta usar os comandos abaixo para construir as imagens.
 ```sh
 cd pet-porta-app
 docker-compose up
@@ -33,6 +35,7 @@ Verifique o Portainer, implantação navegando até o endereço do servidor no s
 
 ```sh
 127.0.0.1:9000
+localhost:9000
 ```
 
 
