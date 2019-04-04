@@ -9,16 +9,16 @@ Projeto criado para o PET(Programa de Educacao Tutorial) - Ministério da Educa�
  - PET_PORTA
 ```
 # Principais Ferramentas:
+* [Nginx] - O Nginx é um servidor da Web que também pode ser usado como reverse proxy, load balancer, mail proxy e HTTP cache.
+
+* [Docker] - Docker é um programa de computador que executa virtualização no nível do sistema operacional.
 
 * [node.js] -  Node.js é um ambiente de tempo de execução JavaScript de plataforma aberta e código aberto que executa o código JavaScript fora de um navegador.
  
 * [Express] - Concebido para construir aplicações web e APIs. Ele foi chamado de estrutura de servidor padrão de fato para o Node.js.
 
-* [Docker] - Docker é um programa de computador que executa virtualização no nível do sistema operacional.
-
 * [VueJS] - Vue.js é uma estrutura do FrontEnd de código aberto para criar interfaces PWA.
 
-* [Nginx] - O Nginx é um servidor da Web que também pode ser usado como reverse proxy, load balancer, mail proxy and HTTP cache.
 
 ...
 
