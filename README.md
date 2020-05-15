@@ -1,5 +1,4 @@
-
-# PET-PORTA-APP
+<h1 align="center">PET-PORTA-APP</h1> 
 <p align="center">
   <a href="https://github.com/hpbonfim/pet-porta-app#readme">
     <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000"/>
