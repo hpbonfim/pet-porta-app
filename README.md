@@ -1,3 +1,5 @@
+
+# PET-PORTA-APP
 <p align="center">
   <a href="https://github.com/hpbonfim/pet-porta-app#readme">
     <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000"/>
@@ -24,7 +26,6 @@
   </a>
 </p>
 
-# PET-PORTA-APP
 Projeto criado para o PET(Programa de Educacao Tutorial) - Ministério da Educação, para ativar um relay eletronico via PWA (Progressive Web App). Consiste em 5 microserviços suportados via Docker Compose.
 
 ```sh
