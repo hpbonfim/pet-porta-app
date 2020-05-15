@@ -1,3 +1,29 @@
+<p align="center">
+  <a href="https://github.com/hpbonfim/pet-porta-app#readme">
+    <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000"/>
+  </a>
+
+  <a href="https://github.com/hpbonfim/pet-porta-app#readme">
+    <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/hpbonfim/pet-porta-app"/>
+  </a>
+
+  <a href="https://github.com/hpbonfim/pet-porta-app#readme">
+    <img alt="size" src="https://img.shields.io/github/repo-size/hpbonfim/pet-porta-app"/>
+  </a>
+
+  <a href="https://github.com/hpbonfim/pet-porta-app/commits/master">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/hpbonfim/pet-porta-app">
+  </a>
+
+  <a href="https://github.com/hpbonfim/pet-porta-app#readme">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="https://github.com/hpbonfim/pet-porta-app#readme" />
+  </a>
+
+  <a href="https://github.com/hpbonfim/pet-porta-app/graphs/commit-activity">
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" target="https://github.com/hpbonfim/pet-porta-app#readme" />
+  </a>
+</p>
+
 # PET-PORTA-APP
 Projeto criado para o PET(Programa de Educacao Tutorial) - Ministério da Educação, para ativar um relay eletronico via PWA (Progressive Web App). Consiste em 5 microserviços suportados via Docker Compose.
 
