@@ -25,6 +25,12 @@
   </a>
 </p>
 
+<p align="center">
+<img width="20%" height="auto" src="pet_porta/src/assets/logo.png" alt="pet-logo" />
+<br/>
+<img width="50%" height="auto" src="pet_porta/src/assets/facom.png" alt="facom" />
+</p>
+
 Projeto criado para o PET(Programa de Educacao Tutorial) - Ministério da Educação, para ativar um relay eletronico via PWA (Progressive Web App). Consiste em 5 microserviços suportados via Docker Compose.
 
 ```sh
