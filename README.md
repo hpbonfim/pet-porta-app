@@ -33,6 +33,13 @@
 
 Projeto criado para o PET(Programa de Educacao Tutorial) - Ministério da Educação, para ativar um relay eletronico via PWA (Progressive Web App). Consiste em 5 microserviços suportados via Docker Compose.
 
+<p align="center">
+<img width="90%" height="auto" src="png/inicio-login.png" alt="inicio" />
+<br/>
+<img width="90%" height="auto" src="png/button.png" alt="functions" />
+</p>
+
+
 ```sh
  - PET_AUTH
  - PET_GATEWAY
