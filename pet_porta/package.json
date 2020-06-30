@@ -14,7 +14,7 @@
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "element-ui": "^2.4.11",
-    "express-jwt": "^5.3.1",
+    "express-jwt": "^6.0.0",
     "helmet": "^3.16.0",
     "jsonwebtoken": "^8.5.0",
     "jwt-express": "^1.1.0",
