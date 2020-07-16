@@ -18,7 +18,7 @@
     "hapi": "^17.5.4",
     "hapi-auth-jwt2": "^8.1.0",
     "jsonwebtoken": "^8.4.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "mailgun-js": "^0.22.0",
     "mongoose": "^5.3.12",
     "nodemon": "^1.18.10"
