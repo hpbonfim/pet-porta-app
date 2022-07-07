@@ -18,7 +18,7 @@
     "helmet": "^3.16.0",
     "jsonwebtoken": "^8.5.0",
     "jwt-express": "^1.1.0",
-    "moment": "^2.23.0",
+    "moment": "^2.29.4",
     "nodemon": "^1.18.10",
     "register-service-worker": "^1.5.2",
     "socket.io-client": "^2.2.0",
