@@ -16,7 +16,7 @@
     "element-ui": "^2.4.11",
     "express-jwt": "^5.3.1",
     "helmet": "^3.16.0",
-    "jsonwebtoken": "^8.5.0",
+    "jsonwebtoken": "^9.0.0",
     "jwt-express": "^1.1.0",
     "moment": "^2.23.0",
     "nodemon": "^1.18.10",
