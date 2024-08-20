@@ -14,7 +14,7 @@
     "express": "^4.16.2",
     "firmata": "^2.0.0",
     "helmet": "^3.16.0",
-    "johnny-five": "^1.0.0",
+    "johnny-five": "^1.5.0",
     "nodemon": "^1.18.10",
     "q": "^1.5.1",
     "serialport": "^7.1.4"
