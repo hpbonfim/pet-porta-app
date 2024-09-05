@@ -12,11 +12,11 @@
     "cors": "^2.8.5",
     "etherport": "^0.2.0",
     "express": "^4.16.2",
-    "firmata": "^2.0.0",
+    "firmata": "^2.2.0",
     "helmet": "^3.16.0",
-    "johnny-five": "^1.0.0",
-    "nodemon": "^1.18.10",
+    "johnny-five": "^1.1.0",
+    "nodemon": "^3.0.0",
     "q": "^1.5.1",
-    "serialport": "^7.1.4"
+    "serialport": "^10.0.2"
   }
 }
