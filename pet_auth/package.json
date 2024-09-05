@@ -17,11 +17,11 @@
     "glue": "^5.0.0",
     "hapi": "^17.5.4",
     "hapi-auth-jwt2": "^8.1.0",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.11",
     "mailgun-js": "^0.22.0",
-    "mongoose": "^5.3.12",
-    "nodemon": "^1.18.10"
+    "mongoose": "^5.7.3",
+    "nodemon": "^3.0.0"
   },
   "devDependencies": {
     "code": "^5.2.0",
