@@ -8,10 +8,10 @@
   "author": "Henrique Paulo Bonfim",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "etherport": "^0.2.0",
-    "express": "^4.16.2",
+    "express": "^4.20.0",
     "firmata": "^2.0.0",
     "helmet": "^3.16.0",
     "johnny-five": "^1.0.0",
