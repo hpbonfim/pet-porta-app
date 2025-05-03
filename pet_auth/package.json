@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "3.0.0",
-    "bluebird": "^3.5.3",
+    "bluebird": "^3.7.2",
     "boom": "^7.2.0",
     "dotenv": "^6.1.0",
     "glue": "^5.0.0",
